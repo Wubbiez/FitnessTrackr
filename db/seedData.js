@@ -33,7 +33,8 @@ await client.query(`
 CREATE TABLE activities (
     id SERIAL PRIMARY KEY,
     name varchar(255) UNIQUE NOT NULL,
-    description TEXT NOT NULL
+    description TEXT NOT NULL,
+    CHECK (lower(name) = name)
 );
 `);
 
