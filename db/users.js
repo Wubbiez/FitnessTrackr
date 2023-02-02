@@ -5,39 +5,60 @@ const client = require("./client");
 // user functions
 async function createUser({ username, password }) {
   try {
-    await client.query(`
-      INSERT INTO users (username, password) VALUES($1, $2)
-      ON CONFLICT (username) DO NOTHING;
+   const {rows:[user]} = await client.query(`
+      INSERT INTO users(username, password) 
+      VALUES($1, $2)
+      ON CONFLICT (username) DO NOTHING
+     RETURNING id, username;
       `, [username, password]);
+   return user;
   } catch (error) {
     console.error();
     throw error;
   }
-
-
 }
 
 async function getUser({ username, password }) {
-  await client.query(`
-    SELECT * FROM users
-    WHERE username = ${username} AND password = ${password};
-  `)
+  try {
+    const {rows:[user]} = await client.query(`
+      SELECT id, username
+      FROM users
+      WHERE username = $1
+        AND password = $2
+    `, [username, password])
+    return user;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 }
 
 async function getUserById(userId) {
-  const { rows: [user] } = await client.query(`
-    SELECT id, username FROM users
-    WHERE id = ${userId};
-  `);
-  return user;
+  try {
+    const {rows: [user]} = await client.query(`
+      SELECT id, username
+      FROM users
+      WHERE id = ${userId};
+    `);
+    return user;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 }
 
 async function getUserByUsername(userName) {
-  const { rows: [user] } = await client.query(`
-    SELECT id, username FROM users
-    WHERE username = ${userName};
-  `);
-  return user;
+  try {
+    const {rows: [user]} = await client.query(`
+      SELECT id, username, password
+      FROM users
+      WHERE username = $1;
+    `, [userName]);
+     return user;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 }
 
 module.exports = {

@@ -1,5 +1,5 @@
 // require in the database adapter functions as you write them (createUser, createActivity...)
-const { createUser } = require('./');
+const { createUser, createActivity, getAllActivities, createRoutine } = require('./');
 const client = require("./client")
 
 async function dropTables() {
@@ -33,8 +33,7 @@ await client.query(`
 CREATE TABLE activities (
     id SERIAL PRIMARY KEY,
     name varchar(255) UNIQUE NOT NULL,
-    description TEXT NOT NULL,
-    CHECK (lower(name) = name)
+    description TEXT NOT NULL
 );
 `);
 
