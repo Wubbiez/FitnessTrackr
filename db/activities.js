@@ -43,28 +43,56 @@ async function getActivityById(id) {
     throw e;
   }
 }
-
-async function getActivityByName(name) {}
-
-async function attachActivitiesToRoutines(routines) {
-  // select and return an array of all activities
+// get activity by name
+async function getActivityByName(name) {
+    try {
+        const {rows: [activity]} = await client.query(`
+        SELECT id, name, description
+        FROM activities
+        WHERE name = $1;
+        `, [name]);
+        return activity;
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
 }
 
-async function updateActivity({ id, ...fields }) {
+// select and return an array of all activities
+async function attachActivitiesToRoutines(routines) {
+  // select and return an array of all activities
+  try {
+    const {rows} = await client.query(`
+    SELECT * FROM activities;
+    `)
+    return rows;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+}
 
-  // don't try to update the id
-  // do update the name and description
-  // return the updated activity
-  // const setString = Object.keys(fields).map(
-  //     (key, index) => `"${ key }"=$${ index + 1 }`
-  // ).join(', ');
-  //
-  // try{
-  //
-  // } catch (e) {
-  //   console.error(e);
-  //   throw e;
-  // }
+// update the activity with the given id and fields
+async function updateActivity({ id, ...fields }) {
+    // don't try to update the id
+    // do update the name and description
+    // return the updated activity
+    const setString = Object.keys(fields).map(
+        (key, index) => `"${ key }"=$${ index + 1 }`
+    ).join(', ');
+
+    try{
+        const {rows: [activity]} = await client.query(`
+        UPDATE activities
+        SET ${setString}
+        WHERE id=${id}
+        RETURNING *;
+        `, Object.values(fields));
+        return activity;
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
 }
 
 module.exports = {
