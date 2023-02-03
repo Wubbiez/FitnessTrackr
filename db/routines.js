@@ -98,8 +98,18 @@ try {
     throw e;
 }
 }
-
 async function getPublicRoutinesByActivity({ id }) {
+    try {
+        const {rows: routine} = await client.query(`
+        SELECT * FROM routines
+        WHERE id = (SELECT "routineId" FROM routine_activities WHERE activity = $1 )
+        AND "isPublic" = true;
+        `, [id]);
+        return routine;
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
 
 }
 
