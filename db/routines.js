@@ -43,19 +43,60 @@ async function getRoutinesWithoutActivities() {
 }
 
 async function getAllRoutines() {
+    try {
+        const {rows:routine} = await client.query(`
+        SELECT * FROM routines
+    `, );
+    return routine;
+    } catch (e) {
+    console.error(e);
+    throw e;
+    }
 
 }
 
 async function getAllPublicRoutines() {
+    try {
+        const {rows:routine} = await client.query(`
+        SELECT * FROM routines
+        WHERE "isPublic" = true;
+    `, );
+    return routine;
+    } catch (e) {
+    console.error(e);
+    throw e;
+    }
+
 
 }
 
 async function getAllRoutinesByUser({ username }) {
+    try {
+        const {rows:routine} = await client.query(`
+        SELECT * FROM routines
+        WHERE "creatorId" = (SELECT id FROM users WHERE username = $1);
+    `, [username]);
+    return routine;
+    } catch (e) {
+    console.error(e);
+    throw e;
+    }
+
 
 }
 
 async function getPublicRoutinesByUser({ username }) {
-
+try {
+  const {rows: routine} = await client.query(`
+  SELECT * FROM routines
+  WHERE "creatorId" = (SELECT id FROM users WHERE username = $1)
+  AND "isPublic" = true;
+  `, [username]);
+  return routine;
+} catch (e) {
+  console.error(e);
+    throw e;
+}
 }
 
 async function getPublicRoutinesByActivity({ id }) {
