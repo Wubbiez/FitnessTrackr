@@ -39,6 +39,7 @@ async function getRoutinesWithoutActivities() {
   console.error(e);
   throw e;
 }
+
 }
 
 async function getAllRoutines() {
