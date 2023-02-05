@@ -58,18 +58,14 @@ async function getActivityByName(name) {
     }
 }
 
-// select and return an array of all activities
+
 async function attachActivitiesToRoutines(routines) {
-  // select and return an array of all activities
-  try {
-    const {rows} = await client.query(`
-    SELECT * FROM activities;
-    `)
-    return rows;
-  } catch (e) {
-    console.error(e);
-    throw e;
-  }
+
+    const activities = await getAllActivities();
+    return routines.map(routine => {
+        routine.activities = activities.filter(activity => activity.routineId === routine.id);
+        return routine;
+    });
 }
 
 // update the activity with the given id and fields
@@ -80,7 +76,9 @@ async function updateActivity({ id, ...fields }) {
     const setString = Object.keys(fields).map(
         (key, index) => `"${ key }"=$${ index + 1 }`
     ).join(', ');
-
+    if (setString.length === 0) {
+        return;
+    }
     try{
         const {rows: [activity]} = await client.query(`
         UPDATE activities

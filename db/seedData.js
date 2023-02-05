@@ -1,5 +1,5 @@
 // require in the database adapter functions as you write them (createUser, createActivity...)
-const { createUser, createActivity, getAllActivities, createRoutine, getRoutinesWithoutActivities  } = require('./');
+const { createUser, createActivity, getAllActivities, createRoutine, getRoutinesWithoutActivities, addActivityToRoutine  } = require('./');
 const client = require("./client")
 
 async function dropTables() {
@@ -7,10 +7,10 @@ async function dropTables() {
   // drop all tables, in the correct order
   try {
     await client.query(`
-      DROP TABLE IF EXISTS routine_activities;
-      DROP TABLE IF EXISTS routines;
-      DROP TABLE IF EXISTS activities;
-      DROP TABLE IF EXISTS users;
+        DROP TABLE IF EXISTS routine_activities;
+        DROP TABLE IF EXISTS routines;
+        DROP TABLE IF EXISTS activities;
+        DROP TABLE IF EXISTS users;
     `);
   } catch (error) {
 console.error("Error dropping tables!");
@@ -46,7 +46,6 @@ CREATE TABLE routines (
 );
 `);
 
-
 await client.query(`
 CREATE TABLE routine_activities (
     id SERIAL PRIMARY KEY,
@@ -57,6 +56,7 @@ CREATE TABLE routine_activities (
     UNIQUE("routineId","activityId")
 )
 `);
+console.log("Finished building tables!");
   } catch(error) {
 console.error("Error building tables!");
 throw error;
@@ -161,7 +161,7 @@ async function createInitialRoutines() {
 async function createInitialRoutineActivities() {
   console.log("starting to create routine_activities...")
   const [bicepRoutine, chestRoutine, legRoutine, cardioRoutine] =
-    await getRoutinesWithoutActivities()
+    await getRoutinesWithoutActivities();
   const [bicep1, bicep2, chest1, chest2, leg1, leg2, leg3] =
     await getAllActivities()
 

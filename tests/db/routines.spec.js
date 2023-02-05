@@ -145,11 +145,13 @@ describe("DB Routines", () => {
 
     it("Should include the private routine", async () => {
       const routines = await getAllRoutines();
+      console.log(routines)
       expectRoutinesToContainRoutine(routines, fakePrivateRoutine);
     });
 
     it("includes their activities", async () => {
       const routines = await getAllRoutines();
+      console.log(routines);
       const routine = routines.find((routine) => routine.id === fakeRoutine.id);
       expectRoutineToContainActivity(routine, fakeActivity);
       expectRoutineToContainActivity(routine, fakeActivity2);
@@ -168,6 +170,7 @@ describe("DB Routines", () => {
 
     it("includes duration and count on activities, from routine_activities join", async () => {
       const routines = await getAllRoutines();
+      console.log(routines);
       const routine = routines.find((routine) => routine.id === fakeRoutine.id);
       const activity = routine.activities.find(
         (activity) => activity.id === fakeActivity.id
