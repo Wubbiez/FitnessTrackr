@@ -60,12 +60,44 @@ async function getActivityByName(name) {
 
 
 async function attachActivitiesToRoutines(routines) {
+    try {
+        const routineIds = routines.map((routine) => routine.id);
+        const {rows: routineActivities} = await client.query(`
+            SELECT *
+            FROM routine_activities
+            WHERE "routineId"
+            IN (${routineIds.join(', ')});
+        `);
+        const activityIds = routineActivities.map((routineActivity) => routineActivity.activityId);
+        const {rows: activities} = await client.query(`
+            SELECT *
+            FROM activities
+            WHERE id
+            IN (${activityIds.join(', ')});
+        `);
+        const activityIdToActivity = {};
+        activities.forEach((activity) => {
+            activityIdToActivity[activity.id] = activity;
+        });
+        routines.forEach((routine) => {
+            routine.activities = [];
+        });
+        routineActivities.forEach((routineActivity) => {
+            const activity = activityIdToActivity[routineActivity.activityId];
+            activity.duration = routineActivity.duration;
+            activity.count = routineActivity.count;
+            activity.routineId = routineActivity.routineId;
+            activity.routineActivityId = routineActivity.id;
 
-    const activities = await getAllActivities();
-    return routines.map(routine => {
-        routine.activities = activities.filter(activity => activity.routineId === routine.id);
-        return routine;
-    });
+            const routine = routines.find((routine) => routine.id === routineActivity.routineId);
+
+            routine.activities.push(activity);
+        });
+        return routines;
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
 }
 
 // update the activity with the given id and fields
