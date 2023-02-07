@@ -46,9 +46,9 @@ async function getRoutinesWithoutActivities() {
 async function getAllRoutines() {
     try {
         const { rows: routines } = await client.query(`
-        SELECT routines.*, users.username AS "creatorName"
-        FROM routines 
-        JOIN users ON routines."creatorId" = users.id
+        SELECT r.*, u.username AS "creatorName"
+        FROM routines r
+        JOIN users u ON r."creatorId" = u.id
         `);
 
         return attachActivitiesToRoutines(routines);
@@ -61,7 +61,8 @@ async function getAllRoutines() {
 async function getAllPublicRoutines() {
     try {
         const {rows:routine} = await client.query(`
-        SELECT r.*, u.username as "creatorName" FROM routines r
+        SELECT r.*, u.username as "creatorName" 
+        FROM routines r
         JOIN users u ON r."creatorId" = u.id
         WHERE "isPublic" = true;
     `, );
@@ -75,8 +76,8 @@ async function getAllPublicRoutines() {
 
 }
 async function getAllRoutinesByUser({username}) {
-    const user = await getUserByUsername( username );
     try {
+        const user = await getUserByUsername( username );
         const {rows:routine} = await client.query(`
         SELECT r.*, u.username as "creatorName" FROM routines r
         JOIN users u ON r."creatorId" = u.id

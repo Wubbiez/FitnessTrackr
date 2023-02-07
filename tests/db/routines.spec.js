@@ -105,13 +105,13 @@ describe("DB Routines", () => {
     fakeRoutineActivity = fakeData.fakeRoutineActivities[0];
   });
 
-  afterAll(async () => {
-    client.query(`
-        DELETE FROM routine_activities;
-        DELETE FROM routines;
-        DELETE FROM activities;
-      `);
-  });
+  // afterAll(async () => {
+  //   client.query(`
+  //       DELETE FROM routine_activities;
+  //       DELETE FROM routines;
+  //       DELETE FROM activities;
+  //     `);
+  // });
 
   /****Before writing the functions for these tests, go to routine_activities.js
      and write the addActivityToRoutine function.****/
@@ -145,13 +145,11 @@ describe("DB Routines", () => {
 
     it("Should include the private routine", async () => {
       const routines = await getAllRoutines();
-      console.log(routines)
       expectRoutinesToContainRoutine(routines, fakePrivateRoutine);
     });
 
     it("includes their activities", async () => {
       const routines = await getAllRoutines();
-      console.log(routines);
       const routine = routines.find((routine) => routine.id === fakeRoutine.id);
       expectRoutineToContainActivity(routine, fakeActivity);
       expectRoutineToContainActivity(routine, fakeActivity2);
@@ -170,7 +168,6 @@ describe("DB Routines", () => {
 
     it("includes duration and count on activities, from routine_activities join", async () => {
       const routines = await getAllRoutines();
-      console.log(routines);
       const routine = routines.find((routine) => routine.id === fakeRoutine.id);
       const activity = routine.activities.find(
         (activity) => activity.id === fakeActivity.id
