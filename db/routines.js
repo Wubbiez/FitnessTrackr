@@ -66,7 +66,6 @@ async function getAllPublicRoutines() {
         JOIN users u ON r."creatorId" = u.id
         WHERE "isPublic" = true;
     `, );
-        console.log(routine);
         return attachActivitiesToRoutines(routine);
     } catch (e) {
     console.error(e);
@@ -142,12 +141,18 @@ async function updateRoutine({ id, ...fields }) {
 }
 async function destroyRoutine(id) {
 try {
-   const {rows: [routine]} = await client.query(`
+    await client.query(`
     DELETE FROM routine_activities
     WHERE "routineId" = $1
     RETURNING *;
     `, [id]);
-   return routine;
+
+    await client.query(`
+    DELETE FROM routines
+    WHERE id = $1
+    RETURNING *;
+    `, [id]);
+
 } catch (e) {
     console.error(e);
     throw e;
