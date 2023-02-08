@@ -93,10 +93,9 @@ async function attachActivitiesToRoutines(routines) {
     );
 
     routines.forEach((routine) => {
-      const activitiesToAdd = activities.filter(
+      routine.activities = activities.filter(
         (activity) => activity.routineId === routine.id
       );
-      routine.activities = activitiesToAdd;
     });
 
     return routines;
