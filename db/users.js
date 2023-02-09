@@ -5,13 +5,18 @@ const client = require("./client");
 // user functions
 async function createUser({ username, password }) {
   try {
-   const {rows:[user]} = await client.query(`
+    const {
+      rows: [user],
+    } = await client.query(
+      `
       INSERT INTO users(username, password) 
       VALUES($1, $2)
       ON CONFLICT (username) DO NOTHING
      RETURNING id, username;
-      `, [username, password]);
-   return user;
+      `,
+      [username, password]
+    );
+    return user;
   } catch (error) {
     console.error();
     throw error;
@@ -20,12 +25,17 @@ async function createUser({ username, password }) {
 
 async function getUser({ username, password }) {
   try {
-    const {rows:[user]} = await client.query(`
+    const {
+      rows: [user],
+    } = await client.query(
+      `
       SELECT id, username
       FROM users
       WHERE username = $1
         AND password = $2
-    `, [username, password])
+    `,
+      [username, password]
+    );
     return user;
   } catch (e) {
     console.error(e);
@@ -35,11 +45,16 @@ async function getUser({ username, password }) {
 
 async function getUserById(userId) {
   try {
-    const {rows: [user]} = await client.query(`
+    const {
+      rows: [user],
+    } = await client.query(
+      `
       SELECT id, username
       FROM users
-      WHERE id = ${userId};
-    `);
+      WHERE id = $1;
+    `,
+      [userId]
+    );
     return user;
   } catch (e) {
     console.error(e);
@@ -49,12 +64,17 @@ async function getUserById(userId) {
 
 async function getUserByUsername(userName) {
   try {
-    const {rows: [user]} = await client.query(`
+    const {
+      rows: [user],
+    } = await client.query(
+      `
       SELECT id, username, password
       FROM users
       WHERE username = $1;
-    `, [userName]);
-     return user;
+    `,
+      [userName]
+    );
+    return user;
   } catch (e) {
     console.error(e);
     throw e;
@@ -66,4 +86,4 @@ module.exports = {
   getUser,
   getUserById,
   getUserByUsername,
-}
+};

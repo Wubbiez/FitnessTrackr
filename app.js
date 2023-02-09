@@ -12,6 +12,7 @@ client.connect();
 // Setup your Middleware and API Router here
 app.use(cors());
 app.use(morgan("dev"));
+app.use(express.json());
 app.use("/api", apiRouter);
 
 app.use((req, res, next) => {
