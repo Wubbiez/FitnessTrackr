@@ -1,8 +1,7 @@
-/* eslint-disable no-useless-catch */
 const express = require("express");
-const router = express.Router();
+const userRouter = express.Router();
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET = "secret_pass" } = process.env;
+const { JWT_SECRET } = process.env;
 const {
   createUser,
   getUser,
@@ -13,19 +12,25 @@ const {
 } = require("../db");
 
 // POST /api/users/register
-router.post("/register", async (req, res, next) => {
+userRouter.post("/register", async (req, res, next) => {
+  console.log(req.body);
   try {
     const { username, password } = req.body;
+
     const queriedUser = await getUserByUsername(username);
+    console.log(queriedUser);
     if (queriedUser) {
+      console.log("entered");
       res.status(401);
       next({
+        error: "Error",
         name: "UserExistsError",
-        message: "A user by that username already exists",
+        message: `User ${queriedUser.username} is already taken.`,
       });
     } else if (password.length < 8) {
       res.status(401);
       next({
+        error: "Error",
         name: "PasswordLengthError",
         message: "Password Too Short!",
       });
@@ -48,12 +53,12 @@ router.post("/register", async (req, res, next) => {
         res.send({ user, message: "you're signed up!", token });
       }
     }
-  } catch (e) {
-    next(e);
+  } catch ({ error, name, message }) {
+    next({ error, name, message });
   }
 });
 // POST /api/users/login
-router.post("/login", async (req, res, next) => {
+userRouter.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
   if (!username || !password) {
     next({
@@ -83,7 +88,7 @@ router.post("/login", async (req, res, next) => {
 });
 
 // GET /api/users/me
-router.get("/me", getUserById, async (req, res, next) => {
+userRouter.get("/me", getUserById, async (req, res, next) => {
   try {
     res.send(req.user);
   } catch (e) {
@@ -91,7 +96,7 @@ router.get("/me", getUserById, async (req, res, next) => {
   }
 });
 // GET /api/users/:username/routines
-router.get("/:username/routines", async (req, res, next) => {
+userRouter.get("/:username/routines", async (req, res, next) => {
   try {
     const { username } = req.params;
     const user = await getUserByUsername(username);
@@ -112,4 +117,4 @@ router.get("/:username/routines", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+module.exports = userRouter;
