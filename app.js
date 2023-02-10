@@ -13,6 +13,8 @@ client.connect();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+
+// 404 handler
 app.use("/api", apiRouter);
 
 app.use((req, res, next) => {
@@ -21,6 +23,10 @@ app.use((req, res, next) => {
   console.log("<_____Body Logger END_____>");
 
   next();
+});
+
+app.use((req, res) => {
+  res.status(404).send({ message: "Not found!" });
 });
 
 module.exports = app;

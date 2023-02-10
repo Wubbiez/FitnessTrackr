@@ -27,13 +27,10 @@ routineActivitiesRouter.patch("/:routineActivityId", async (req, res, next) => {
   try {
     allRoutines.map((routine) => {
       routine.activities.filter((activity) => {
-        console.log(activity);
-
         if (
           req.user.id === routine.creatorId &&
           routineActivity.id === activity.id
         ) {
-          console.log(routineActivityId, duration, count);
           res.send(update);
         } else if (
           routineActivity.id === activity.id &&

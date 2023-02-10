@@ -13,14 +13,12 @@ const {
 
 // POST /api/users/register
 userRouter.post("/register", async (req, res, next) => {
-  console.log(req.body);
   try {
     const { username, password } = req.body;
 
     const queriedUser = await getUserByUsername(username);
-    console.log(queriedUser);
+
     if (queriedUser) {
-      console.log("entered");
       res.status(401);
       next({
         error: "Error",
@@ -118,7 +116,9 @@ userRouter.get("/:username/routines", async (req, res, next) => {
       const routines = await getAllRoutinesByUser({ username: username });
       res.send(routines);
     } else {
-      const publicRoutines = await getPublicRoutinesByUser({ username });
+      const publicRoutines = await getPublicRoutinesByUser({
+        username: username,
+      });
       res.send(publicRoutines);
     }
   } catch (e) {
