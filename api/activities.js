@@ -37,7 +37,25 @@ activitiesRouter.get("/", async (req, res, next) => {
   }
 });
 // POST /api/activities
-
+activitiesRouter.post("/", async (req, res, next) => {
+  const { name, description } = req.body;
+  try {
+    if (req.user) {
+      const checkActivity = await getActivityByName(name);
+      if (checkActivity) {
+        next({
+          error: `An activity with name ${name} already exists`,
+          name: "Duplicate Name",
+          message: `An activity with name ${name} already exists`,
+        });
+      }
+      const createUserActivity = await createActivity({ name, description });
+      res.send(createUserActivity);
+    }
+  } catch (e) {
+    next(e);
+  }
+});
 // PATCH /api/activities/:activityId
 
 module.exports = activitiesRouter;
