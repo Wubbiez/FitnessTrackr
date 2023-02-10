@@ -57,5 +57,6 @@ activitiesRouter.post("/", async (req, res, next) => {
   }
 });
 // PATCH /api/activities/:activityId
-
+//
+activitiesRouter.patch;
 module.exports = activitiesRouter;
