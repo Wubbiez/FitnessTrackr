@@ -5,6 +5,7 @@ const {
   getAllActivities,
   getActivityById,
   getActivityByName,
+  updateActivity,
 } = require("../db/activities");
 const { getPublicRoutinesByActivity } = require("../db/routines");
 
@@ -57,6 +58,32 @@ activitiesRouter.post("/", async (req, res, next) => {
   }
 });
 // PATCH /api/activities/:activityId
-//
-activitiesRouter.patch;
+activitiesRouter.patch("/:activityId", async (req, res, next) => {
+  const { name, description } = req.body;
+  const { activityId } = req.params;
+
+  try {
+    const getActivity = await getActivityById(activityId);
+    if (!getActivity) {
+      next({
+        error: `Activity ${activityId} not found`,
+        name: "Not Found",
+        message: `Activity ${activityId} not found`,
+      });
+    }
+    const activityByName = await getActivityByName(name);
+    if (activityByName) {
+      next({
+        error: `An activity with name ${name} already exists`,
+        name: "Duplicate Name",
+        message: `An activity with name ${name} already exists`,
+      });
+    } else {
+      res.send(await updateActivity({ id: activityId, name, description }));
+    }
+  } catch (e) {
+    next({});
+  }
+});
+
 module.exports = activitiesRouter;
