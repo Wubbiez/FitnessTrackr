@@ -88,9 +88,18 @@ userRouter.post("/login", async (req, res, next) => {
 });
 
 // GET /api/users/me
-userRouter.get("/me", getUserById, async (req, res, next) => {
+userRouter.get("/me", async (req, res, next) => {
   try {
-    res.send(req.user);
+    if (req.user) {
+      res.send(req.user);
+    } else {
+      res.status(401);
+      next({
+        error: "You must be logged in to perform this action",
+        name: "Invalid User",
+        message: "You must be logged in to perform this action",
+      });
+    }
   } catch (e) {
     next(e);
   }
@@ -109,8 +118,8 @@ userRouter.get("/:username/routines", async (req, res, next) => {
       const routines = await getAllRoutinesByUser({ username: username });
       res.send(routines);
     } else {
-      const routines = await getAllRoutinesByUser({ username: username });
-      res.send(routines);
+      const publicRoutines = await getPublicRoutinesByUser({ username });
+      res.send(publicRoutines);
     }
   } catch (e) {
     next(e);
