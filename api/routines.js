@@ -13,9 +13,6 @@ routinesRouter.get("/", async (req, res, next) => {
   }
 });
 // POST /api/routines
-// router.post("/", async (req, res, next) => {
-//
-// })
 
 routinesRouter.post("/", async (req, res, next) => {
   const { isPublic, name, goal } = req.body;
