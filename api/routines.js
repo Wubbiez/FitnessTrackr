@@ -118,10 +118,13 @@ routinesRouter.delete("/:routineId", async (req, res, next) => {
 routinesRouter.post("/:routineId/activities", async (req, res, next) => {
   const { routineId } = req.params;
   console.log(req.body);
-  const { name, description } = req.body;
+  const { activityId, count, duration } = req.body;
 
   try {
     const getRoutine = await getRoutineById(routineId);
+    const existingRoutineActivity = await getActivityById(activityId);
+    const attachActivity = await attachActivitiesToRoutines(getRoutine);
+
     if (!getRoutine) {
       console.log("not found");
       next({
@@ -131,22 +134,33 @@ routinesRouter.post("/:routineId/activities", async (req, res, next) => {
       });
     }
     if (req.user.id !== getRoutine.creatorId) {
-      console.log("not allowed");
       res.status(403);
       next({
         error: `User ${req.user.username} is not allowed to add activities to ${getRoutine.name}`,
         name: "No authentication",
         message: `User ${req.user.username} is not allowed to add activities to ${getRoutine.name}`,
       });
-    } else {
-      const create = await createActivity({
-        name,
-        description,
+    }
+    if (
+      existingRoutineActivity.id === activityId &&
+      getRoutine.id === parseInt(routineId) &&
+      getRoutine.activities.length !== 0
+    ) {
+      console.log("activity already exists");
+      next({
+        error: `Activity ID ${activityId} already exists in Routine ID ${getRoutine.id}`,
+        name: "Already Exists",
+        message: `Activity ID ${activityId} already exists in Routine ID ${getRoutine.id}`,
       });
-      const update = await attachActivitiesToRoutines(create);
-      getRoutine.activities.push(update);
-      console.log(create);
-      res.send(create);
+    } else {
+      getRoutine.activities = {
+        activityId: activityId,
+        count: count,
+        duration: duration,
+        routineId: parseInt(routineId),
+      };
+
+      res.send(getRoutine.activities);
     }
   } catch (e) {
     next({

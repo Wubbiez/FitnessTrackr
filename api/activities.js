@@ -14,13 +14,17 @@ activitiesRouter.get("/:activityId/routines", async (req, res, next) => {
   const { activityId } = req.params;
   try {
     const routines = await getPublicRoutinesByActivity({ id: activityId });
-    res.send(routines);
+    if (routines.length) {
+      res.send(routines);
+    } else {
+      next({
+        error: `Activity ${activityId} not found`,
+        name: "Activity does not exist",
+        message: `Activity ${activityId} not found`,
+      });
+    }
   } catch (e) {
-    next({
-      error: `Activity ${activityId} not found`,
-      name: "Activity does not exist",
-      message: `Activity ${activityId} not found`,
-    });
+    console.error(e);
   }
 });
 

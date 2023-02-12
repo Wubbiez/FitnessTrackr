@@ -74,31 +74,46 @@ async function getActivityByName(name) {
 }
 
 async function attachActivitiesToRoutines(routines) {
+  let routineIds = routines.id;
+  let setString = "";
   try {
-    const routineIds = routines.map((routine) => routine.id);
+    if (routines.length > 0) {
+      routineIds = routines.map((routine) => routine.id);
 
-    const setString = routines
-      .map((routine, index) => `$${index + 1}`)
-      .join(", ");
+      setString = routines.map((routine, index) => `$${index + 1}`).join(", ");
 
-    const { rows: activities } = await client.query(
-      `
+      const { rows: activities } = await client.query(
+        `
             SELECT a.*, ra.duration, ra.count, ra.id AS "routineActivityId", ra."routineId"
             FROM activities a
-            JOIN routine_activities ra ON ra."activityId" = a.id
+                   JOIN routine_activities ra ON ra."activityId" = a.id
             WHERE ra."routineId"
-            IN (${setString});
-        `,
-      routineIds
-    );
-
-    routines.forEach((routine) => {
-      routine.activities = activities.filter(
-        (activity) => activity.routineId === routine.id
+                    IN (${setString});
+          `,
+        routineIds
       );
-    });
 
-    return routines;
+      routines.forEach((routine) => {
+        routine.activities = activities.filter(
+          (activity) => activity.routineId === routine.id
+        );
+      });
+
+      return routines;
+    } else {
+      const { rows: activities } = await client.query(
+        `
+            SELECT a.*, ra.duration, ra.count, ra.id AS "routineActivityId", ra."routineId"
+            FROM activities a
+                   JOIN routine_activities ra ON ra."activityId" = a.id
+            WHERE ra."routineId"
+            IN($1)
+          `,
+        [routineIds]
+      );
+      routines.activities = activities;
+      return routines;
+    }
   } catch (e) {
     console.error(e);
     throw e;
