@@ -7,7 +7,7 @@ const {
   getActivityByName,
   updateActivity,
 } = require("../db/activities");
-const { getRoutineById } = require("../db/routines");
+const { getRoutineById, destroyRoutine } = require("../db/routines");
 
 // GET /api/routines
 routinesRouter.get("/", async (req, res, next) => {
@@ -48,7 +48,7 @@ routinesRouter.patch("/:routineId", async (req, res, next) => {
   const { routineId } = req.params;
 
   try {
-    const [getRoutine] = await getRoutineById(routineId);
+    const getRoutine = await getRoutineById(routineId);
     if (!getRoutine) {
       console.log("not found");
       next({
@@ -83,7 +83,74 @@ routinesRouter.patch("/:routineId", async (req, res, next) => {
   }
 });
 // DELETE /api/routines/:routineId
-
+routinesRouter.delete("/:routineId", async (req, res, next) => {
+  const { routineId } = req.params;
+  try {
+    const getRoutine = await getRoutineById(routineId);
+    if (!getRoutine) {
+      next({
+        error: `Routine ${routineId} not found`,
+        name: "Not Found",
+        message: `Routine ${routineId} not found`,
+      });
+    }
+    if (req.user.id !== getRoutine.creatorId) {
+      res.status(403);
+      next({
+        error: `User ${req.user.username} is not allowed to delete ${getRoutine.name}`,
+        name: "No authentication",
+        message: `User ${req.user.username} is not allowed to delete ${getRoutine.name}`,
+      });
+    } else {
+      const removeRoutine = await destroyRoutine(routineId);
+      res.send(removeRoutine);
+    }
+  } catch (e) {
+    next({
+      error: `You must be logged in to perform this action`,
+      name: "Login Error",
+      message: `You must be logged in to perform this action`,
+    });
+  }
+});
 // POST /api/routines/:routineId/activities
+routinesRouter.post("/:routineId/activities", async (req, res, next) => {
+  const { routineId } = req.params;
+  const { activityId, count, duration } = req.body;
+  try {
+    const [getRoutine] = await getRoutineById(routineId);
+    if (!getRoutine) {
+      console.log("not found");
+      next({
+        error: `Routine ${routineId} not found`,
+        name: "Not Found",
+        message: `Routine ${routineId} not found`,
+      });
+    }
+    if (req.user.id !== getRoutine.creatorId) {
+      console.log("not allowed");
+      res.status(403);
+      next({
+        error: `User ${req.user.username} is not allowed to add activities to ${getRoutine.name}`,
+        name: "No authentication",
+        message: `User ${req.user.username} is not allowed to add activities to ${getRoutine.name}`,
+      });
+    } else {
+      const create = await createActivity({
+        routineId,
+        activityId,
+        count,
+        duration,
+      });
+      res.send(create);
+    }
+  } catch (e) {
+    next({
+      error: `You must be logged in to perform this action`,
+      name: "Login Error",
+      message: `You must be logged in to perform this action`,
+    });
+  }
+});
 
 module.exports = routinesRouter;

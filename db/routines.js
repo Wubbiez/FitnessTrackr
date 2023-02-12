@@ -24,7 +24,9 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
 
 async function getRoutineById(id) {
   try {
-    const { rows: routine } = await client.query(
+    const {
+      rows: [routine],
+    } = await client.query(
       `
         SELECT * FROM routines
         WHERE id = $1;
@@ -159,6 +161,17 @@ async function updateRoutine({ id, ...fields }) {
 }
 async function destroyRoutine(id) {
   try {
+    const {
+      rows: [deleteRoutine],
+    } = await client.query(
+      `
+    DELETE FROM routines
+    WHERE id = $1
+    RETURNING *;
+    `,
+      [id]
+    );
+
     await client.query(
       `
     DELETE FROM routine_activities
@@ -168,14 +181,7 @@ async function destroyRoutine(id) {
       [id]
     );
 
-    await client.query(
-      `
-    DELETE FROM routines
-    WHERE id = $1
-    RETURNING *;
-    `,
-      [id]
-    );
+    return deleteRoutine;
   } catch (e) {
     console.error(e);
     throw e;
