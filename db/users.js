@@ -1,10 +1,11 @@
 const client = require("./client");
-
-// database functions
+const bcrypt = require("bcrypt");
+const SALT_COUNT = 10;
 
 // user functions
 async function createUser({ username, password }) {
   try {
+    const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
     const {
       rows: [user],
     } = await client.query(
@@ -14,9 +15,14 @@ async function createUser({ username, password }) {
       ON CONFLICT (username) DO NOTHING
      RETURNING id, username;
       `,
-      [username, password]
+      [username, hashedPassword]
     );
-    return user;
+    if (user) {
+      delete user.password;
+      return user;
+    } else {
+      console.error("name already used");
+    }
   } catch (error) {
     console.error();
     throw error;
@@ -25,18 +31,26 @@ async function createUser({ username, password }) {
 
 async function getUser({ username, password }) {
   try {
-    const {
-      rows: [user],
-    } = await client.query(
-      `
-      SELECT id, username
-      FROM users
-      WHERE username = $1
-        AND password = $2
-    `,
-      [username, password]
-    );
-    return user;
+    const user = await getUserByUsername(username);
+    const hashedPassword = user.password;
+    const comparePass = await bcrypt.compare(password, hashedPassword);
+    if (comparePass) {
+      const {
+        rows: [user],
+      } = await client.query(
+        `
+            SELECT id, username
+            FROM users
+            WHERE username = $1
+              AND password = $2
+          `,
+        [username, hashedPassword]
+      );
+      delete user.password;
+      return user;
+    } else {
+      return null;
+    }
   } catch (e) {
     console.error(e);
     throw e;

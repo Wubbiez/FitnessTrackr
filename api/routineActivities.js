@@ -4,47 +4,42 @@ const {
   destroyRoutineActivity,
   getRoutineActivityById,
   updateRoutineActivity,
+  canEditRoutineActivity,
 } = require("../db/routine_activities");
-const { getAllRoutines } = require("../db/routines");
-const {
-  getActivityById,
-  getActivityByName,
-  updateActivity,
-} = require("../db/activities");
+const { getAllRoutines, getRoutineById } = require("../db/routines");
 
 // PATCH /api/routine_activities/:routineActivityId
 routineActivitiesRouter.patch("/:routineActivityId", async (req, res, next) => {
   const { duration, count } = req.body;
   const { routineActivityId } = req.params;
 
-  const routineActivity = await getRoutineActivityById(routineActivityId);
   const allRoutines = await getAllRoutines();
-  const update = await updateRoutineActivity({
-    id: routineActivity.id,
-    duration,
-    count,
-  });
+
   try {
-    allRoutines.map((routine) => {
-      routine.activities.filter((activity) => {
-        if (
-          req.user.id === routine.creatorId &&
-          routineActivity.id === activity.id
-        ) {
-          res.send(update);
-        } else if (
-          routineActivity.id === activity.id &&
-          req.user.id !== routine.creatorId
-        ) {
-          res.status(403);
-          next({
-            error: `User ${req.user.username} is not allowed to update ${routine.name}`,
-            name: "No authentication",
-            message: `User ${req.user.username} is not allowed to update ${routine.name}`,
-          });
-        }
+    const routineActivity = await getRoutineActivityById(routineActivityId);
+    const routine = await getRoutineById(routineActivity.routineId);
+    if (!routineActivity) {
+      next({
+        error: `Routine Activity ${routineActivityId} not found`,
+        name: "Not Found",
+        message: `Routine Activity ${routineActivityId} not found`,
       });
-    });
+    } else if (req.user.id !== routine.creatorId) {
+      res.status(403);
+      next({
+        error: `User ${req.user.username} is not allowed to update ${routine.name}`,
+        name: "No authentication",
+        message: `User ${req.user.username} is not allowed to update ${routine.name}`,
+      });
+    } else {
+      const update = await updateRoutineActivity({
+        id: routineActivity.id,
+        duration,
+        count,
+      });
+      console.log(update);
+      res.send(update);
+    }
   } catch (e) {
     next(e);
   }
@@ -56,35 +51,28 @@ routineActivitiesRouter.delete(
   async (req, res, next) => {
     const { routineActivityId } = req.params;
 
-    if (req.user) {
-      try {
-        const allRoutines = await getAllRoutines();
-        const routineActivity = await getRoutineActivityById(routineActivityId);
-        const destroy = await destroyRoutineActivity(routineActivity.id);
-
-        allRoutines.map((routine) => {
-          routine.activities.filter((activity) => {
-            if (
-              routineActivity.id === activity.id &&
-              req.user.id === routine.creatorId
-            ) {
-              res.send(destroy);
-            } else if (
-              routineActivity.id === activity.id &&
-              req.user.id !== routine.creatorId
-            ) {
-              res.status(403);
-              next({
-                error: `User ${req.user.username} is not allowed to delete ${routine.name}`,
-                name: "No authentication",
-                message: `User ${req.user.username} is not allowed to delete ${routine.name}`,
-              });
-            }
-          });
+    try {
+      const routineActivity = await getRoutineActivityById(routineActivityId);
+      const routine = await getRoutineById(routineActivity.routineId);
+      if (!routineActivity) {
+        next({
+          error: `Routine Activity ${routineActivityId} not found`,
+          name: "Not Found",
+          message: `Routine Activity ${routineActivityId} not found`,
         });
-      } catch (e) {
-        next(e);
+      } else if (req.user.id !== routine.creatorId) {
+        res.status(403);
+        next({
+          error: `User ${req.user.username} is not allowed to delete ${routine.name}`,
+          name: "No authentication",
+          message: `User ${req.user.username} is not allowed to delete ${routine.name}`,
+        });
+      } else {
+        const destroy = await destroyRoutineActivity(routineActivity.id);
+        res.send(destroy);
       }
+    } catch (e) {
+      next(e);
     }
   }
 );

@@ -146,7 +146,6 @@ routinesRouter.post("/:routineId/activities", async (req, res, next) => {
       getRoutine.id === parseInt(routineId) &&
       getRoutine.activities.length !== 0
     ) {
-      console.log("activity already exists");
       next({
         error: `Activity ID ${activityId} already exists in Routine ID ${getRoutine.id}`,
         name: "Already Exists",
