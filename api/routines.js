@@ -6,6 +6,7 @@ const {
   getActivityById,
   getActivityByName,
   updateActivity,
+  attachActivitiesToRoutines,
 } = require("../db/activities");
 const { getRoutineById, destroyRoutine } = require("../db/routines");
 
@@ -116,9 +117,11 @@ routinesRouter.delete("/:routineId", async (req, res, next) => {
 // POST /api/routines/:routineId/activities
 routinesRouter.post("/:routineId/activities", async (req, res, next) => {
   const { routineId } = req.params;
-  const { activityId, count, duration } = req.body;
+  console.log(req.body);
+  const { name, description } = req.body;
+
   try {
-    const [getRoutine] = await getRoutineById(routineId);
+    const getRoutine = await getRoutineById(routineId);
     if (!getRoutine) {
       console.log("not found");
       next({
@@ -137,11 +140,12 @@ routinesRouter.post("/:routineId/activities", async (req, res, next) => {
       });
     } else {
       const create = await createActivity({
-        routineId,
-        activityId,
-        count,
-        duration,
+        name,
+        description,
       });
+      const update = await attachActivitiesToRoutines(create);
+      getRoutine.activities.push(update);
+      console.log(create);
       res.send(create);
     }
   } catch (e) {
