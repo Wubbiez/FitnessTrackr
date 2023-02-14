@@ -1,4 +1,5 @@
 # fitnesstrackr
+kade did this change
 
 an API for our new fitness empire, FitnessTrac.kr, using node, express, and postgresql
 
