@@ -1,0 +1,70 @@
+.container {
+    background: darkslateblue;
+    display: flex;
+    max-height: 20vh;
+    width: 100vw;
+    max-width: 100vw;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+
+}
+
+
+.container a:hover {
+    box-shadow: 0 2px 5px -2px black;
+}
+
+.user {
+    background: aliceblue;
+    text-transform: capitalize;
+    text-align: center;
+    padding: .5em;
+    height: 1em;
+
+}
+
+.block {
+    display: flex;
+    position: center;
+    margin-left: 40vw;
+    margin-right: auto;
+
+}
+
+.headerLogo {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+}
+
+.container img {
+    max-width: 20vw;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: end;
+    padding-right: 10px;
+    min-width: 8vw;
+}
+
+.links a {
+    background: white;
+    font-size: 1em;
+    margin: 5px;
+    margin: 5px;
+    justify-content: center;
+    height: 20px;
+}
+
+.container button {
+    text-align: right;
+}
+
+
