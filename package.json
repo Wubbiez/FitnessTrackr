@@ -38,6 +38,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@mui/styles": "^5.11.9",
     "@mui/system": "^5.11.9",
     "bcrypt": "^4.0.1",
     "chalk": "^4.0.0",

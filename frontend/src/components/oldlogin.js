@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
-function MyForm() {
+function Oldlogin() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = (event) => {
@@ -72,4 +72,4 @@ function MyForm() {
   );
 }
 
-export default MyForm;
+export default Oldlogin;

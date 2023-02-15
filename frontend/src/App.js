@@ -1,21 +1,24 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-// import Typography from "@mnpm update @material-ui/core@^4.11.2 react@^17.0.0ui/material/Typography";
-import MyForm from "./components/Login";
-import { ThemeProvider } from "@mui/material/styles";
-import { createTheme } from "@mui/material";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Header from "./components/Header";
+import LoginGPT from "./components/Register";
+import { styled } from "@mui/material/styles";
+import { Grid } from "@mui/material";
+
+const Main = styled(Grid)({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+});
 
 function App() {
   return (
     <>
       <Header />
-      <Container sx={{ my: 2 }} maxWidth="sm">
-        <MyForm />
-      </Container>
+      <Main>
+        <LoginGPT />
+      </Main>
     </>
   );
 }
