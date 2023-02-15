@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 
 function MyForm() {
   const [userName, setUserName] = useState("");
@@ -28,6 +29,9 @@ function MyForm() {
 
   return (
     <>
+      <Typography variant="h4" component="h1" gutterBottom align="center">
+        Login
+      </Typography>
       <Box
         sx={{
           display: "flex",

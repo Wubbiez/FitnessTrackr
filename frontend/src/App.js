@@ -7,23 +7,15 @@ import Typography from "@mui/material/Typography";
 import MyForm from "./components/Login";
 import { ThemeProvider } from "@mui/material/styles";
 import { createTheme } from "@mui/material";
+import Header from "./components/Header";
 
 function App() {
   return (
     <>
-      <Container maxWidth="sm">
-        <Box sx={{ my: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom align="center">
-            CDN example
-          </Typography>
-          <Typography variant="h4" component="h1" align="center">
-            <Button variant="text">Text</Button>
-            <Button variant="contained">Contained</Button>
-            <Button variant="outlined">Outlined</Button>
-          </Typography>
-        </Box>
+      <Header />
+      <Container sx={{ my: 2 }} maxWidth="sm">
+        <MyForm />
       </Container>
-      <MyForm />
     </>
   );
 }
