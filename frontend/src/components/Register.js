@@ -44,7 +44,8 @@ const LoginButton = styled(Button)(({ theme }) => ({
 
 const Login = (props) => {
   const { setUsername, setPassword, username, password } = props;
-  async function handleSubmit() {
+  async function handleSubmit(event) {
+    event.preventDefault();
     try {
       await createaUser(username, password);
     } catch (e) {
@@ -81,7 +82,10 @@ const Login = (props) => {
             autoComplete="username"
             autoFocus
             value={username}
-            onChange={(event) => setUsername(event.target.value)}
+            onChange={(event) => {
+              event.preventDefault();
+              setUsername(event.target.value);
+            }}
           />
           <TextField
             variant="outlined"
@@ -94,7 +98,10 @@ const Login = (props) => {
             id="password"
             autoComplete="current-password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) => {
+              event.preventDefault();
+              setPassword(event.target.value);
+            }}
           />
           <LoginButton
             type="submit"
