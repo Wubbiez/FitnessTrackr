@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { styled } from "@mui/material";
 import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
-// import { createUser } from "../db/users";
+import { createaUser, loginUser } from "../api/apirequests";
 const Root = styled(Grid)({
   maxHeight: "90vh",
 });
@@ -42,18 +42,13 @@ const LoginButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(3, 0, 2),
 }));
 
-const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
+const Login = (props) => {
+  const { setUsername, setPassword, username, password } = props;
   async function handleSubmit() {
     try {
-      // await createUser({ username, password });
-
-      setPassword("");
-      setUsername("");
+      await createaUser(username, password);
     } catch (e) {
-      alert("That username is already taken!");
+      console.log(e);
     }
   }
 
@@ -113,7 +108,7 @@ const Login = () => {
             type="submit"
             fullWidth
             variant="contained"
-            color="primary"
+            color="secondary"
           >
             Sign Up
           </LoginButton>

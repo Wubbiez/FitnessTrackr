@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Login from "./components/Register";
 import { styled } from "@mui/material/styles";
 import { Grid } from "@mui/material";
+import { useState } from "react";
 
 const Main = styled(Grid)({
   display: "flex",
@@ -13,13 +14,25 @@ const Main = styled(Grid)({
 });
 
 function App() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   return (
     <>
       <Header />
       <Main>
         <Routes>
           <Route exact path="/home" />
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={
+              <Login
+                setUsername={setUsername}
+                setPassword={setPassword}
+                username={username}
+                password={password}
+              />
+            }
+          />
           {/*<Route path="/signup" element={<Signup />} />*/}
         </Routes>
       </Main>
