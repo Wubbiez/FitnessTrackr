@@ -5,6 +5,7 @@ import Login from "./components/Register";
 import { styled } from "@mui/material/styles";
 import { Grid } from "@mui/material";
 import { useState } from "react";
+import RoutinesList from "./components/Routines";
 
 const Main = styled(Grid)({
   display: "flex",
@@ -34,6 +35,7 @@ function App() {
             }
           />
           {/*<Route path="/signup" element={<Signup />} />*/}
+          <Route path="/routines" element={<RoutinesList />} />
         </Routes>
       </Main>
     </>
