@@ -42,14 +42,31 @@ const LoginButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(3, 0, 2),
 }));
 
+const RegisterButton = styled(Button)(({ theme }) => ({
+  margin: theme.spacing(3, 0, 2),
+}));
+
 const Login = (props) => {
   const { setUsername, setPassword, username, password } = props;
+  const [token, setToken] = useState("");
+  const [loginText, setLoginText] = useState("Sign in");
+
   async function handleSubmit(event) {
     event.preventDefault();
-    try {
-      await createaUser(username, password);
-    } catch (e) {
-      console.log(e);
+    if (loginText === "Sign in") {
+      try {
+        await loginUser(username, password);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    if (loginText === "Register") {
+      try {
+        await createaUser(username, password);
+        setToken(token);
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 
@@ -68,7 +85,7 @@ const Login = (props) => {
         alignItems="center" // center vertically
       >
         <Typography component="h1" variant="h5">
-          Sign in
+          {loginText}
         </Typography>
         <LoginForm onSubmit={handleSubmit}>
           <TextField
@@ -111,15 +128,18 @@ const Login = (props) => {
           >
             Sign In
           </LoginButton>
-          <LoginButton
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="secondary"
-          >
-            Sign Up
-          </LoginButton>
         </LoginForm>
+        <RegisterButton
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="secondary"
+          onClick={() => {
+            setLoginText("Register");
+          }}
+        >
+          Sign Up
+        </RegisterButton>
       </Main>
     </Root>
   );
