@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { styled } from "@mui/material";
 import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
-
+import { createUser } from "../../../db/users";
 const Root = styled(Grid)({
   maxHeight: "90vh",
 });
@@ -42,14 +42,20 @@ const LoginButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(3, 0, 2),
 }));
 
-const LoginGPT = () => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Handle login logic here
-  };
+  async function handleSubmit() {
+    try {
+      await createUser({ username, password });
+
+      setPassword("");
+      setUsername("");
+    } catch (e) {
+      alert("That username is already taken!");
+    }
+  }
 
   return (
     <Root container justifyContent={"center"}>
@@ -103,10 +109,18 @@ const LoginGPT = () => {
           >
             Sign In
           </LoginButton>
+          <LoginButton
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+          >
+            Sign Up
+          </LoginButton>
         </LoginForm>
       </Main>
     </Root>
   );
 };
 
-export default LoginGPT;
+export default Login;
