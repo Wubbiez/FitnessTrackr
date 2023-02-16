@@ -6,13 +6,13 @@ DO NOT CHANGE THIS FILE
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const faker = require("faker");
-const client = require("../../db/client");
+const client = require("../../frontend/src/db/client");
 const {
   getUserById,
   createUser,
   getUser,
   getUserByUsername,
-} = require("../../db");
+} = require("../../frontend/src/db");
 const { createFakeUser } = require("../helpers");
 
 describe("DB Users", () => {

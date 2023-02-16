@@ -5,7 +5,7 @@ DO NOT CHANGE THIS FILE
 */
 require("dotenv").config();
 const request = require("supertest");
-require("../../db/client");
+require("../../frontend/src/db/client");
 const app = require("../../app");
 
 describe("/api/health", () => {

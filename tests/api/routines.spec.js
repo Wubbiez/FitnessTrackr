@@ -26,7 +26,7 @@ const {
 
 const { objectContaining, arrayContaining } = expect;
 
-const { getRoutineById } = require("../../db");
+const { getRoutineById } = require("../../frontend/src/db");
 
 describe("/api/routines", () => {
   describe("GET /api/routines", () => {

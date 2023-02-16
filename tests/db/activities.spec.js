@@ -4,14 +4,14 @@ DO NOT CHANGE THIS FILE
 
 */
 require("dotenv").config();
-const client = require("../../db/client");
+const client = require("../../frontend/src/db/client");
 const {
   getAllActivities,
   createActivity,
   updateActivity,
   getActivityById,
   getActivityByName,
-} = require("../../db");
+} = require("../../frontend/src/db");
 const { createFakeActivity } = require("../helpers");
 
 describe("DB Activities", () => {

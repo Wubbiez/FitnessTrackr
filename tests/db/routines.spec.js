@@ -5,7 +5,7 @@ DO NOT CHANGE THIS FILE
 */
 require("dotenv").config();
 const faker = require("faker");
-const client = require("../../db/client");
+const client = require("../../frontend/src/db/client");
 const {
   getRoutineById,
   getAllRoutines,
@@ -16,7 +16,7 @@ const {
   createRoutine,
   updateRoutine,
   destroyRoutine,
-} = require("../../db");
+} = require("../../frontend/src/db");
 
 const {
   createFakePublicRoutine,
@@ -117,7 +117,7 @@ describe("DB Routines", () => {
      and write the addActivityToRoutine function.****/
 
   describe("createRoutine", () => {
-   it("Creates and returns the new routine", async () => {
+    it("Creates and returns the new routine", async () => {
       const user = await createFakeUser();
       const routine = await createRoutine({
         creatorId: user.id,

@@ -22,7 +22,7 @@ const { ActivityExistsError, ActivityNotFoundError } = require("../../errors");
 
 const { arrayContaining } = expect;
 
-const { getPublicRoutinesByActivity } = require("../../db");
+const { getPublicRoutinesByActivity } = require("../../frontend/src/db");
 
 describe("/api/activities", () => {
   describe("GET /api/activities", () => {

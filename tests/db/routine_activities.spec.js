@@ -4,7 +4,7 @@ DO NOT CHANGE THIS FILE
 
 */
 require("dotenv").config();
-const client = require("../../db/client");
+const client = require("../../frontend/src/db/client");
 const faker = require("faker");
 
 const {
@@ -14,7 +14,7 @@ const {
   getRoutineActivityById,
   getRoutineActivitiesByRoutine,
   canEditRoutineActivity,
-} = require("../../db");
+} = require("../../frontend/src/db");
 const {
   createFakeActivity,
   createFakePublicRoutine,

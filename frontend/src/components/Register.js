@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { styled } from "@mui/material";
 import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
-import { createUser } from "../../../db/users";
+// import { createUser } from "../db/users";
 const Root = styled(Grid)({
   maxHeight: "90vh",
 });
@@ -48,7 +48,7 @@ const Login = () => {
 
   async function handleSubmit() {
     try {
-      await createUser({ username, password });
+      // await createUser({ username, password });
 
       setPassword("");
       setUsername("");

@@ -4,7 +4,7 @@ const {
   createRoutine,
   createActivity,
   addActivityToRoutine,
-} = require("../db");
+} = require("../frontend/src/db");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET = "neverTell" } = process.env;
 // This contains helper functions which create fake entries in the database
@@ -50,7 +50,10 @@ const createFakeUserWithRoutines = async (username, numRoutines = 1) => {
   };
 };
 
-const createFakeUserWithRoutinesAndActivities = async (username, numRoutines = 1) => {
+const createFakeUserWithRoutinesAndActivities = async (
+  username,
+  numRoutines = 1
+) => {
   const { fakeUser, token } = await createFakeUserWithToken(username);
   const fakeRoutines = [];
   const fakePrivateRoutines = [];
@@ -141,7 +144,7 @@ const createFakeActivity = async (
 ) => {
   const activity = await createActivity({
     name,
-    description
+    description,
   });
   if (!activity) {
     throw new Error("createActivity didn't return an activity");
