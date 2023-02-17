@@ -1,7 +1,7 @@
 export async function createaUser(username, password) {
   console.log(username, password);
   try {
-    await fetch("http://localhost:3000/api/users/register", {
+    const response = await fetch("http://localhost:3000/api/users/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -11,6 +11,11 @@ export async function createaUser(username, password) {
         password: password,
       }),
     });
+    const results = await response.json();
+    if (results.token) {
+      localStorage.setItem("user-token", results.token);
+      return localStorage.getItem("user-token");
+    }
     alert(password);
   } catch (e) {
     throw ("err", e);
