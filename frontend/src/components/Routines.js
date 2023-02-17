@@ -1,39 +1,47 @@
-import { useEffect, useState } from 'react';
-import styles from './Routines.module.css'
+import { useEffect, useState } from "react";
+import styles from "./Routines.module.css";
+import React from "react";
 // import { useHistory } from 'react-router-dom';
 //needs work
 
 const RoutinesList = () => {
   const [routines, setRoutines] = useState([]);
-//   const history = useHistory()
-
+  //   const history = useHistory()
 
   useEffect(() => {
     const getRoutines = async () => {
-      const response = await fetch(`http://fitnesstrac-kr.herokuapp.com/api/routines`)
+      const response = await fetch(
+        `http://fitnesstrac-kr.herokuapp.com/api/routines`
+      );
       const data = await response.json();
       setRoutines(data);
-      console.log(data)
+      console.log(data);
+    };
+    getRoutines();
+  }, []);
 
-    }
-    getRoutines()
-  
-  }, [])
+  return (
+    <>
+      <h1 className={styles.title}>Routines</h1>
+      <div className={styles.routines}>
+        {routines.map((routine) => (
+          <div key={routine.id} className={styles.title}>
+            <h3>{routine.name}</h3>
+            <div>{routine.goal}</div>
+            <div>{routine.creatorName}</div>
+            <div>
+              {" "}
+              {routine.activities.map((activity) => (
+                <div>
+                  <div> Activity ID: {activity.id} </div>
+                  <div> Name: {activity.name} </div>
+                  <div> Description: {activity.description} </div>
+                </div>
+              ))}
+            </div>
+            {/*<div>{routine.activities}</div> */}
 
-  return <>
-    <h1 className={styles.title}>
-      Routines
-    </h1>
-<div className={styles.routines}>
-    {
-      routines.map(routine => <div key={routine.id} className={styles.title}>
-        <h3>{routine.name}</h3>
-        <div>{routine.goal}</div>
-        <div>{routine.creatorName}</div>
-        {/* <div>{routine.activities}</div> */}
-
-
-        {/* <button
+            {/* <button
           onClick={
             () => {
               history.push({pathname:`/posts/${post._id}`,
@@ -46,15 +54,11 @@ const RoutinesList = () => {
         >
           View Listing
         </button> */}
+          </div>
+        ))}
+      </div>
+    </>
+  );
+};
 
-
-      </div>)
-
-    }
-    </div>
-  </>
-
-
-}
-
-export default RoutinesList
+export default RoutinesList;
