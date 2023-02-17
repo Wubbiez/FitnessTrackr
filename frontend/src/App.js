@@ -9,6 +9,7 @@ import RoutinesList from "./components/Routines";
 import { useEffect } from "react";
 import { getUser } from "./api/apirequests";
 import ActivitiesList from "./components/Activities";
+import Logout from "./components/Logout";
 
 export const TOKEN_STORAGE_KEY = "user-token";
 const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -24,7 +25,6 @@ function App() {
   const [token, setToken] = useState(storageToken);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [currentPage, setCurrentPage] = useState("");
   const [user, setUser] = useState(null);
 
   // useEffect(() => {
@@ -66,6 +66,16 @@ function App() {
           <Route
             path="/activities"
             element={<ActivitiesList token={token} />}
+          />
+          <Route
+            path="/logout"
+            element={
+              <Logout
+                token={token}
+                setToken={setToken}
+                setUsername={setUsername}
+              />
+            }
           />
         </Routes>
       </Main>

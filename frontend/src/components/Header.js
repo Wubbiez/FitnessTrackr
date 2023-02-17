@@ -1,6 +1,5 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
-import Logout from "./Logout";
 import { useEffect } from "react";
 
 function Header(props) {
@@ -54,16 +53,11 @@ function Header(props) {
           >
             Login/Register
           </Button>
-          {user && (
-            <Logout
-              token={token}
-              setToken={setToken}
-              setUsername={setUsername}
-            />
-          )}
+
           <Button
             onClick={() => {
               window.location.href = "/logout";
+              alert(token);
             }}
             color="inherit"
           >
