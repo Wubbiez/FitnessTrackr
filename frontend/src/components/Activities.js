@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
 import styles from "./Activities.module.css";
 import React from "react";
+import { getAllActivities } from "../db/activities"
 // import { useHistory } from 'react-router-dom';
 //needs work
 
-const ActivitiesList = () => {
+const ActivitiesList = (props) => {
+  const {token} = props
   const [activities, setActivities] = useState([]);
+  const [activitiesLoaded, setPostsLoaded] = useState([]);
   //   const history = useHistory()
 
   useEffect(() => {
-    const getActivities = async () => {
-      const response = await fetch(
-        `http://fitnesstrac-kr.herokuapp.com/api/activities`
-      );
-      const data = await response.json();
-      setActivities(data);
-      console.log(data);
-    };
-    getActivities();
-  }, []);
+    try {
+      getAllActivities(token).then((r) => setActivities(r.activities));
+    } catch (e) {
+      console.error(e);
+    }
+    setPostsLoaded(true);
+  }, [token, setActivities, activitiesLoaded]);
 
   return (
     <>

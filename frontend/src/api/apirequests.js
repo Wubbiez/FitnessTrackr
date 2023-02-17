@@ -59,3 +59,16 @@ export async function loginUser(username, password) {
     throw ("err", e);
   }
 }
+
+
+export async function getAllActivities() {
+  const response = await fetch('http://fitnesstrac-kr.herokuapp.com/api/activities', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then(response => response.json())
+    .then(result => {
+      console.log(result);
+    })
+    .catch(console.error);
+}

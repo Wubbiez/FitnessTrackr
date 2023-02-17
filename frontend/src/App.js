@@ -56,7 +56,14 @@ function App() {
           />
           {/*<Route path="/signup" element={<Signup />} />*/}
           <Route path="/routines" element={<RoutinesList />} />
-          <Route path="/activities" element={<ActivitiesList />} />
+          <Route 
+          path="/activities" 
+          element={
+          <ActivitiesList 
+            token={token}
+            />
+            } 
+          />
         </Routes>
       </Main>
     </>
