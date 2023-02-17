@@ -1,6 +1,3 @@
-export const BASE_URL = "https://strangers-things.herokuapp.com";
-export const COHORT_NAME = "2209-FTB-ET-WEB-PT";
-
 export async function createaUser(username, password) {
   console.log(username, password);
   try {
@@ -49,8 +46,8 @@ export async function loginUser(username, password) {
       }),
     });
     const results = await response.json();
-    if (results.data.token) {
-      localStorage.setItem("user-token", results.data.token);
+    if (results.token) {
+      localStorage.setItem("user-token", results.token);
       return localStorage.getItem("user-token");
     }
   } catch (e) {
