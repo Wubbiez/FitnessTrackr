@@ -47,23 +47,26 @@ const RegisterButton = styled(Button)(({ theme }) => ({
 }));
 
 const Login = (props) => {
-  const { setUsername, setPassword, username, password } = props;
-  const [token, setToken] = useState("");
+  const { setUsername, setPassword, username, password, setToken, token } =
+    props;
   const [loginText, setLoginText] = useState("Sign in");
 
   async function handleSubmit(event) {
     event.preventDefault();
     if (loginText === "Sign in") {
       try {
-        await loginUser(username, password);
+        await loginUser(username, password).then((r) => {
+          setToken(r.token);
+        });
       } catch (e) {
         console.log(e);
       }
     }
     if (loginText === "Register") {
       try {
-        await createaUser(username, password);
-        setToken(token);
+        await createaUser(username, password).then((r) => {
+          setToken(r.token);
+        });
       } catch (e) {
         console.log(e);
       }

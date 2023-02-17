@@ -6,6 +6,11 @@ import { styled } from "@mui/material/styles";
 import { Grid } from "@mui/material";
 import { useState } from "react";
 import RoutinesList from "./components/Routines";
+import { useEffect } from "react";
+import { getUser } from "./api/apirequests";
+
+export const TOKEN_STORAGE_KEY = "user-token";
+const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
 
 const Main = styled(Grid)({
   display: "flex",
@@ -15,8 +20,20 @@ const Main = styled(Grid)({
 });
 
 function App() {
+  const [token, setToken] = useState(storageToken);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
+    setToken(storageToken);
+    getUser(token).then((r) => {
+      setUser(r);
+    });
+  }, [token]);
+
   return (
     <>
       <Header />
@@ -31,6 +48,8 @@ function App() {
                 setPassword={setPassword}
                 username={username}
                 password={password}
+                setToken={setToken}
+                token={token}
               />
             }
           />
