@@ -39,7 +39,7 @@ const RoutinesList = () => {
                 </div>
               ))}
             </div>
-            {/*<div>{routine.activities}</div> */}
+            
 
             {/* <button
           onClick={
