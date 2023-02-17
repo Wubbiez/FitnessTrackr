@@ -1,8 +1,33 @@
 import { useEffect, useState } from "react";
-import styles from "./Routines.module.css";
 import React from "react";
+import {
+  Grid,
+  Paper,
+  styled,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+} from "@mui/material";
 // import { useHistory } from 'react-router-dom';
 //needs work
+const Root = styled(Grid)({
+  maxHeight: "90vh",
+});
+const Main = styled(Grid)(({ theme }) => ({
+  margin: theme.spacing(2, 4),
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center", // center horizontally
+}));
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  margin: theme.spacing(2, 4),
+  display: "flex",
+  flexDirection: "column",
+  padding: theme.spacing(4),
+}));
 
 const RoutinesList = () => {
   const [routines, setRoutines] = useState([]);
@@ -15,33 +40,37 @@ const RoutinesList = () => {
       );
       const data = await response.json();
       setRoutines(data);
-      console.log(data);
     };
     getRoutines();
   }, []);
 
   return (
     <>
-      <h1 className={styles.title}>Routines</h1>
-      <div className={styles.routines}>
-        {routines.map((routine) => (
-          <div key={routine.id} className={styles.title}>
-            <h3>{routine.name}</h3>
-            <div>{routine.goal}</div>
-            <div>{routine.creatorName}</div>
-            <div>
-              {" "}
-              {routine.activities.map((activity) => (
-                <div>
-                  <div> Activity ID: {activity.id} </div>
-                  <div> Name: {activity.name} </div>
-                  <div> Description: {activity.description} </div>
-                </div>
-              ))}
-            </div>
-            
-
-            {/* <button
+      <Root container justifyContent={"center"}>
+        <Typography component={"h1"} variant={"h2"}>
+          Routines
+        </Typography>
+        <Grid container spacing={3}>
+          {routines.map((routine) => (
+            <Grid item xs={12} sm={12} md={12}>
+              <Card component={StyledPaper}>
+                <CardContent>
+                  <Typography variant={"h5"}>{routine.name}</Typography>
+                  <Typography>{routine.goal}</Typography>
+                  <Typography>{routine.creatorName}</Typography>
+                  <div>
+                    {" "}
+                    {routine.activities.map((activity) => (
+                      <div>
+                        <div> Activity ID: {activity.id} </div>
+                        <div> Name: {activity.name} </div>
+                        <div> Description: {activity.description} </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+              {/* <button
           onClick={
             () => {
               history.push({pathname:`/posts/${post._id}`,
@@ -54,9 +83,10 @@ const RoutinesList = () => {
         >
           View Listing
         </button> */}
-          </div>
-        ))}
-      </div>
+            </Grid>
+          ))}
+        </Grid>
+      </Root>
     </>
   );
 };
