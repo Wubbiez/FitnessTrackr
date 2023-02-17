@@ -57,7 +57,6 @@ function Header(props) {
           <Button
             onClick={() => {
               window.location.href = "/logout";
-              alert(token);
             }}
             color="inherit"
           >

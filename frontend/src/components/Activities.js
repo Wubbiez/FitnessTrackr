@@ -1,12 +1,12 @@
 // import { useEffect, useState } from "react";
 // import styles from "./Activities.module.css";
 // import React from "react";
-// import { getAllActivities } from "../db/activities"
+// import { getAllActivities } from "../db/activities";
 // // import { useHistory } from 'react-router-dom';
 // //needs work
 //
 // const ActivitiesList = (props) => {
-//   const {token} = props
+//   const { token } = props;
 //   const [activities, setActivities] = useState([]);
 //   const [activitiesLoaded, setPostsLoaded] = useState([]);
 //   //   const history = useHistory()
@@ -35,4 +35,4 @@
 //   );
 // };
 //
-// export default ActivitiesList
+// export default ActivitiesList;
