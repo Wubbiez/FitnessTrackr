@@ -1,7 +1,12 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import Logout from "./Logout";
+import { useEffect } from "react";
 
-function Header() {
+function Header(props) {
+  const { token, user, setToken, username, setUsername } = props;
+  useEffect(() => {}, [token]);
+
   return (
     <AppBar position="sticky">
       <Toolbar>
@@ -9,12 +14,61 @@ function Header() {
           Fitness Trackr
         </Typography>
         <Box display="flex" flexDirection="row">
-          <Button color="inherit">Home</Button>
-          <Button color="inherit">Routines</Button>
-          <Button color="inherit">My Routines</Button>
-          <Button color="inherit">Activities</Button>
-          <Button color="inherit">Login/Register</Button>
-          <Button color="inherit">Logout</Button>
+          <Button
+            onClick={() => {
+              window.location.href = "/home";
+            }}
+            color="inherit"
+          >
+            Home
+          </Button>
+          <Button
+            onClick={() => {
+              window.location.href = "/routines";
+            }}
+            color="inherit"
+          >
+            Routines
+          </Button>
+          <Button
+            onClick={() => {
+              window.location.href = "/activities";
+            }}
+            color="inherit"
+          >
+            My Routines
+          </Button>
+          <Button
+            onClick={() => {
+              window.location.href = "/activities";
+            }}
+            color="inherit"
+          >
+            Activities
+          </Button>
+          <Button
+            onClick={() => {
+              window.location.href = "/login";
+            }}
+            color="inherit"
+          >
+            Login/Register
+          </Button>
+          {user && (
+            <Logout
+              token={token}
+              setToken={setToken}
+              setUsername={setUsername}
+            />
+          )}
+          <Button
+            onClick={() => {
+              window.location.href = "/logout";
+            }}
+            color="inherit"
+          >
+            Logout
+          </Button>
         </Box>
       </Toolbar>
     </AppBar>

@@ -24,7 +24,7 @@ function App() {
   const [token, setToken] = useState(storageToken);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [currentPage, setCurrentPage] = useState("");
   const [user, setUser] = useState(null);
 
   // useEffect(() => {
@@ -37,7 +37,14 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header
+        token={token}
+        user={user}
+        setUser={setUser}
+        setToken={setToken}
+        setUsername={setUsername}
+        setPassword={setPassword}
+      />
       <Main>
         <Routes>
           <Route exact path="/home" />
@@ -56,13 +63,9 @@ function App() {
           />
           {/*<Route path="/signup" element={<Signup />} />*/}
           <Route path="/routines" element={<RoutinesList />} />
-          <Route 
-          path="/activities" 
-          element={
-          <ActivitiesList 
-            token={token}
-            />
-            } 
+          <Route
+            path="/activities"
+            element={<ActivitiesList token={token} />}
           />
         </Routes>
       </Main>
