@@ -14,6 +14,7 @@ function Header() {
           <Button color="inherit">My Routines</Button>
           <Button color="inherit">Activities</Button>
           <Button color="inherit">Login/Register</Button>
+          <Button color="inherit">Logout</Button>
         </Box>
       </Toolbar>
     </AppBar>

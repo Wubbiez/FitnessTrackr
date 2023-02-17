@@ -26,13 +26,13 @@ function App() {
 
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
-    setToken(storageToken);
-    getUser(token).then((r) => {
-      setUser(r);
-    });
-  }, [token]);
+  // useEffect(() => {
+  //   const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
+  //   setToken(storageToken);
+  //   getUser(token).then((r) => {
+  //     setUser(r);
+  //   });
+  // }, [token]);
 
   return (
     <>
