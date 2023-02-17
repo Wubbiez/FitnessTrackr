@@ -60,15 +60,34 @@ export async function loginUser(username, password) {
   }
 }
 
+export async function CreateActivity(token, { name, description }) {
+  try {
+    const response = await fetch('http://fitnesstrac-kr.herokuapp.com/api/activities',
+      {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          activity: {
+            name,
+            description,
+          }
+        })
+      }).then(response => response.json())
+      .then(result => {
+        console.log(result)
+      });
 
-export async function getAllActivities() {
-  const response = await fetch('http://fitnesstrac-kr.herokuapp.com/api/activities', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }).then(response => response.json())
-    .then(result => {
-      console.log(result);
-    })
-    .catch(console.error);
+    console.log(response)
+
+
+
+  } catch (err) {
+    console.log('failed to make an Activity');
+    console.error(err)
+  }
+
 }
+

@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { getUser } from "./api/apirequests";
 import ActivitiesList from "./components/Activities";
 import Logout from "./components/Logout";
+import CreateActivity from "./components/createActivity";
 
 export const TOKEN_STORAGE_KEY = "user-token";
 const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -26,6 +27,14 @@ function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [description, setDescription] = useState("")
+  const [name, setName] = useState("")
+
+//   const setValue = (e) => {
+//     return (event) => {
+//         e(event.target.value)
+//     }
+// }
 
   // useEffect(() => {
   //   const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -66,6 +75,13 @@ function App() {
           <Route
             path="/activities"
             element={<ActivitiesList token={token} />}
+          />
+          <Route path="/createActivity" element={<CreateActivity 
+          token={token}
+          name={name}
+          setName={setName}
+          description={description}
+          setDescription={setDescription} />}
           />
           <Route
             path="/logout"
