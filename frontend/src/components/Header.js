@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 function Header(props) {
   const { token, user, setToken, username, setUsername } = props;
-  useEffect(() => {}, [token]);
+  // useEffect(() => {}, [token]);
 
   return (
     <AppBar position="sticky">

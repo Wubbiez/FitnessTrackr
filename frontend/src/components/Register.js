@@ -50,14 +50,24 @@ const Login = (props) => {
   const { setUsername, setPassword, username, password, setToken, token } =
     props;
   const [loginText, setLoginText] = useState("Sign in");
+  const [showButton, setShowButton] = useState(true);
+  const [buttonText, setButtonText] = useState("Sign In");
 
+  const handleClick = () => {
+    setShowButton(!showButton);
+    setButtonText("Register");
+  };
   async function handleSubmit(event) {
     event.preventDefault();
     if (loginText === "Sign in") {
       try {
-        await loginUser(username, password).then((r) => {
-          setToken(r.token);
-        });
+        await loginUser(username, password)
+          .then((r) => {
+            setToken(r.token);
+          })
+          .then(() => {
+            window.location.href = "/home";
+          });
       } catch (e) {
         console.log(e);
       }
@@ -129,20 +139,22 @@ const Login = (props) => {
             variant="contained"
             color="primary"
           >
-            Sign In
+            {buttonText}
           </LoginButton>
         </LoginForm>
-        <RegisterButton
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            setLoginText("Register");
-          }}
-        >
-          Sign Up
-        </RegisterButton>
+        {showButton && (
+          <RegisterButton
+            type="submit"
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              setLoginText("Register");
+              handleClick();
+            }}
+          >
+            Register
+          </RegisterButton>
+        )}
       </Main>
     </Root>
   );
