@@ -60,14 +60,33 @@ export async function loginUser(username, password) {
   }
 }
 
-
 export async function getAllActivities() {
-  const response = await fetch('http://fitnesstrac-kr.herokuapp.com/api/activities', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }).then(response => response.json())
-    .then(result => {
+  const response = await fetch(
+    "http://fitnesstrac-kr.herokuapp.com/api/activities",
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+    })
+    .catch(console.error);
+}
+
+export async function getUsersRoutines(user) {
+  const response = await fetch(
+    `http://fitnesstrac-kr.herokuapp.com/api/users/${user}/routines`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((result) => {
       console.log(result);
     })
     .catch(console.error);

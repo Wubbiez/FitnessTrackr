@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import React from "react";
+import { Link } from "@mui/material";
 import {
   Grid,
   Paper,
@@ -50,22 +51,32 @@ const RoutinesList = () => {
         <Typography component={"h1"} variant={"h2"}>
           Routines
         </Typography>
-        <Grid container spacing={3}>
+        <Grid container spacing={1}>
           {routines.map((routine) => (
             <Grid item xs={12} sm={12} md={12}>
               <Card component={StyledPaper}>
                 <CardContent>
                   <Typography variant={"h5"}>{routine.name}</Typography>
                   <Typography>{routine.goal}</Typography>
-                  <Typography>{routine.creatorName}</Typography>
+                  <Typography>
+                    <Link
+                      component={"button"}
+                      variant={"h5"}
+                      onClick={() => {
+                        window.location.href = `/${routine.creatorName}/routines`;
+                      }}
+                    >
+                      {routine.creatorName}
+                    </Link>
+                  </Typography>
                   <div>
                     {" "}
                     {routine.activities.map((activity) => (
-                      <div>
+                      <Card component={StyledPaper}>
                         <div> Activity ID: {activity.id} </div>
                         <div> Name: {activity.name} </div>
                         <div> Description: {activity.description} </div>
-                      </div>
+                      </Card>
                     ))}
                   </div>
                 </CardContent>
