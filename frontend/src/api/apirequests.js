@@ -60,6 +60,7 @@ export async function loginUser(username, password) {
   }
 }
 
+
 export async function CreateActivity(token, { name, description }) {
   try {
     const response = await fetch('http://fitnesstrac-kr.herokuapp.com/api/activities',
@@ -89,5 +90,37 @@ export async function CreateActivity(token, { name, description }) {
     console.error(err)
   }
 
+}
+
+export async function getAllActivities() {
+  const response = await fetch(
+    "http://fitnesstrac-kr.herokuapp.com/api/activities",
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+    })
+    .catch(console.error);
+}
+
+export async function getUsersRoutines(user) {
+  const response = await fetch(
+    `http://fitnesstrac-kr.herokuapp.com/api/users/${user}/routines`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+    })
+    .catch(console.error);
 }
 
