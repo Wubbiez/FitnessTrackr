@@ -44,10 +44,8 @@ export async function loginUser(username, password) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user: {
-          username: username,
-          password: password,
-        },
+        username: username,
+        password: password,
       }),
     });
     const results = await response.json();
