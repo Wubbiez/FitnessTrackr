@@ -8,6 +8,7 @@ import { useState } from "react";
 import RoutinesList from "./components/Routines";
 import { useEffect } from "react";
 import { getUser } from "./api/apirequests";
+import ActivitiesList from "./components/Activities";
 
 export const TOKEN_STORAGE_KEY = "user-token";
 const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -55,6 +56,7 @@ function App() {
           />
           {/*<Route path="/signup" element={<Signup />} />*/}
           <Route path="/routines" element={<RoutinesList />} />
+          <Route path="/activities" element={<ActivitiesList />} />
         </Routes>
       </Main>
     </>
