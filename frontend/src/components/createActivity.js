@@ -57,7 +57,7 @@ async function CreateActivity(props) {
                     value={description}
                 />
             </label>
-            <button>Submit Activity</button>
+            <button type="submit">Submit Activity</button>
 
         </form>
     )
