@@ -20,6 +20,22 @@ export async function createaUser(username, password) {
   }
 }
 
+export async function getUser(token) {
+  try {
+    const response = await fetch(`http://localhost:3000/api/users/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const results = await response.json();
+    return results;
+  } catch (e) {
+    throw ("err", e);
+  }
+}
+
 export async function loginUser(username, password) {
   try {
     const response = await fetch(`http://localhost:3000/api/users/login`, {
