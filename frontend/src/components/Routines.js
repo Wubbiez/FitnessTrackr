@@ -10,6 +10,7 @@ import {
   CardContent,
   Button,
 } from "@mui/material";
+import { getPublicRoutines } from "../api/apirequests";
 // import { useHistory } from 'react-router-dom';
 //needs work
 const Root = styled(Grid)({
@@ -35,20 +36,13 @@ const RoutinesList = () => {
   //   const history = useHistory()
 
   useEffect(() => {
-    const getRoutines = async () => {
-      const response = await fetch(
-        `http://fitnesstrac-kr.herokuapp.com/api/routines`
-      );
-      const data = await response.json();
-      setRoutines(data);
-    };
-    getRoutines();
+    getPublicRoutines().then((r) => setRoutines(r));
   }, []);
 
   return (
     <>
       <Root container justifyContent={"center"}>
-        <Typography component={"h1"} variant={"h2"}>
+        <Typography component={"h1"} variant={"h1"}>
           Routines
         </Typography>
         <Grid container spacing={1}>
