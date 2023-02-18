@@ -46,9 +46,9 @@ const RoutinesList = () => {
           Routines
         </Typography>
         <Grid container spacing={1}>
-          {routines.map((routine) => (
+          {routines.map((routine, index) => (
             <Grid item xs={12} sm={12} md={12}>
-              <Card component={StyledPaper}>
+              <Card component={StyledPaper} key={index}>
                 <CardContent>
                   <Typography variant={"h5"}>{routine.name}</Typography>
                   <Typography>{routine.goal}</Typography>
