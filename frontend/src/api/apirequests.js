@@ -60,7 +60,7 @@ export async function loginUser(username, password) {
   }
 }
 
-export async function CreateActivity(token, { name, description }) {
+export async function createActivity(token, { name, description }) {
   try {
     const response = await fetch('http://fitnesstrac-kr.herokuapp.com/api/activities',
       {

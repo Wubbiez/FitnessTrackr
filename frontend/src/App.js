@@ -74,7 +74,7 @@ function App() {
           <Route path="/routines" element={<RoutinesList />} />
           <Route
             path="/activities"
-            element={<ActivitiesList token={token} />}
+            element={<ActivitiesList token={token} name={name} description={description}/>}
           />
           <Route path="/createActivity" element={<CreateActivity 
           token={token}
