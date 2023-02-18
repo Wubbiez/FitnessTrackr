@@ -57,7 +57,7 @@ const RoutinesList = () => {
                       component={"button"}
                       variant={"h5"}
                       onClick={() => {
-                        window.location.href = `/${routine.creatorName}/routines`;
+                        window.location.href = `/users/${routine.creatorName}/routines`;
                       }}
                     >
                       {routine.creatorName}

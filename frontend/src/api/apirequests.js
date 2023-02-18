@@ -113,6 +113,7 @@ export async function getUsersRoutines(user) {
     const response = await fetch(
       `http://fitnesstrac-kr.herokuapp.com/api/users/${user}/routines`,
       {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
