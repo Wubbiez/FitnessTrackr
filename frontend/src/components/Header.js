@@ -31,7 +31,7 @@ function Header(props) {
           </Button>
           <Button
             onClick={() => {
-              window.location.href = "/activities";
+              window.location.href = "/myroutines";
             }}
             color="inherit"
           >

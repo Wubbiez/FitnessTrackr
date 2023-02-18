@@ -6,12 +6,11 @@ import { styled } from "@mui/material/styles";
 import { Grid } from "@mui/material";
 import { useState } from "react";
 import RoutinesList from "./components/Routines";
-import { useEffect } from "react";
-import { getUser } from "./api/apirequests";
 import ActivitiesList from "./components/Activities";
 import Logout from "./components/Logout";
 import CreateActivity from "./components/createActivity";
 import UsersRoutines from "./components/UsersRoutines";
+import MyRoutines from "./components/MyRoutines";
 
 export const TOKEN_STORAGE_KEY = "user-token";
 const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -112,6 +111,10 @@ function App() {
           <Route
             path={`/users/:routineCreator/routines`}
             element={<UsersRoutines />}
+          />
+          <Route
+            path="/myroutines"
+            element={<MyRoutines username={username} />}
           />
         </Routes>
       </Main>
