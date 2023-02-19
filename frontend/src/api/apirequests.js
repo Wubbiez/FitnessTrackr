@@ -206,7 +206,10 @@ export async function createRoutine(token, name, goal, isPublic) {
 
 export async function createRoutineActivity(
   token,
-  { routineId, activityId, count, duration }
+  routineId,
+  activityId,
+  count,
+  duration
 ) {
   try {
     const response = await fetch(
@@ -231,6 +234,26 @@ export async function createRoutineActivity(
     return results;
   } catch (err) {
     console.log("failed to make a Routine Activity");
+    console.error(err);
+  }
+}
+
+export async function removeRoutine(token, routineId) {
+  try {
+    const response = await fetch(
+      `http://fitnesstrac-kr.herokuapp.com/api/routines/${routineId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const results = await response.json();
+    return results;
+  } catch (err) {
+    console.log("failed to delete routine");
     console.error(err);
   }
 }
