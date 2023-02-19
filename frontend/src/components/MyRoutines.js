@@ -11,19 +11,26 @@ import {
 } from "@mui/material";
 import {
   createRoutine,
+  createRoutineActivity,
   getUsersRoutines,
   removeRoutine,
 } from "../api/apirequests";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import TextField from "@mui/material/TextField";
-import DialogActions from "@mui/material/DialogActions";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import FormControl from "@mui/material/FormControl";
-import RadioGroup from "@mui/material/RadioGroup";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  TextField,
+  DialogActions,
+  FormControlLabel,
+  Radio,
+  FormControl,
+  RadioGroup,
+  Select,
+  MenuItem,
+} from "@mui/material";
+
+import { getAllActivities } from "../api/apirequests";
 
 const Root = styled(Grid)(({ theme }) => ({
   maxHeight: "90vh",
@@ -56,6 +63,10 @@ function MyRoutines(props) {
   const [isPublic, setIsPublic] = React.useState(false);
   const [routines, setRoutines] = useState([]);
   const [selectedRoutineId, setSelectedRoutineId] = useState(null);
+  const [activities, setActivities] = useState([]);
+  const [selectedActivityId, setSelectedActivityId] = useState(null);
+  const [count, setCount] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -87,7 +98,13 @@ function MyRoutines(props) {
     event.preventDefault();
     setOpenActivity(false);
     try {
-      createRoutine(token, name, goal, isPublic);
+      createRoutineActivity(
+        token,
+        selectedRoutine.id,
+        selectedActivityId,
+        count,
+        duration
+      );
     } catch (error) {
       console.error(error);
     }
@@ -95,11 +112,17 @@ function MyRoutines(props) {
 
   useEffect(() => {
     getUsersRoutines(username).then((r) => setRoutines(r));
+    getAllActivities().then((r) => setActivities(r));
   }, []);
 
   const selectedRoutine = routines.find(
     (item) => item.id === selectedRoutineId
   );
+
+  const handleSelectChange = (event) => {
+    setSelectedActivityId(event.target.value);
+  };
+
   return (
     <>
       <Root container justifyContent={"center"}>
@@ -192,6 +215,18 @@ function MyRoutines(props) {
                   <CardContent>
                     <Typography variant={"h5"}>{routine.name}</Typography>
                     <Typography>{routine.goal}</Typography>
+
+                    <CardContent>
+                      {routine.activities.map((activity) => (
+                        <Card component={StyledPaper}>
+                          <div> Name: {activity.name} </div>
+                          <div> Description: {activity.description} </div>
+                          <div> Count: {activity.count} </div>
+                          <div> Duration: {activity.duration} </div>
+                        </Card>
+                      ))}
+                    </CardContent>
+
                     <ActivityButton
                       type="submit"
                       variant="contained"
@@ -208,53 +243,42 @@ function MyRoutines(props) {
                         {selectedRoutine ? selectedRoutine.name : null} routine
                       </DialogTitle>
                       <DialogContent>
+                        <Select
+                          value={selectedActivityId}
+                          onChange={handleSelectChange}
+                        >
+                          {activities.map((activity) => (
+                            <MenuItem value={activity.id}>
+                              {activity.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
                         <TextField
                           autoFocus
                           margin="dense"
-                          id="name"
-                          label="name"
-                          type="name"
+                          id="count"
+                          label="count"
+                          type="count"
                           fullWidth
                           variant="standard"
-                          value={name}
+                          value={count}
                           onChange={(e) => {
-                            setName(e.target.value);
+                            setCount(e.target.value);
                           }}
                         />
                         <TextField
                           autoFocus
                           margin="dense"
-                          id="goal"
-                          label="goal"
-                          type="goal"
+                          id="duration"
+                          label="duration"
+                          type="duration"
                           fullWidth
                           variant="standard"
-                          value={goal}
+                          value={duration}
                           onChange={(e) => {
-                            setGoal(e.target.value);
+                            setDuration(e.target.value);
                           }}
                         />
-                        <FormControl>
-                          <RadioGroup
-                            aria-labelledby="demo-radio-buttons-group-label"
-                            value={isPublic.toString()}
-                            name="radio-buttons-group"
-                            onChange={(e) => {
-                              setIsPublic(e.target.value === "true");
-                            }}
-                          >
-                            <FormControlLabel
-                              value="true"
-                              control={<Radio />}
-                              label="public"
-                            />
-                            <FormControlLabel
-                              value="false"
-                              control={<Radio />}
-                              label="private"
-                            />
-                          </RadioGroup>
-                        </FormControl>
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleCloseActivity}>Cancel</Button>

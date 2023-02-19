@@ -221,12 +221,10 @@ export async function createRoutineActivity(
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          routineActivity: {
-            routineId,
-            activityId,
-            count,
-            duration,
-          },
+          routineId: routineId,
+          activityId: activityId,
+          count: count,
+          duration: duration,
         }),
       }
     );
