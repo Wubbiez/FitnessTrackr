@@ -62,7 +62,7 @@ function MyRoutines(props) {
 
   useEffect(() => {
     getUsersRoutines(username).then((r) => setRoutines(r));
-  }, []);
+  }, [routines]);
 
   return (
     <>
@@ -145,17 +145,6 @@ function MyRoutines(props) {
                 <CardContent>
                   <Typography variant={"h5"}>{routine.name}</Typography>
                   <Typography>{routine.goal}</Typography>
-                  <Typography>
-                    <Link
-                      component={"button"}
-                      variant={"h5"}
-                      onClick={() => {
-                        window.location.href = `/routines/${routine.id}`;
-                      }}
-                    >
-                      View Routine
-                    </Link>
-                  </Typography>
                 </CardContent>
               </Card>
             </Grid>

@@ -64,7 +64,7 @@ const Login = (props) => {
         await loginUser(username, password)
           .then((r) => {
             setToken(r.token);
-            setUsername(r.user.username);
+            // setUsername(r.user.username);
           })
           .then(() => {
             window.location.href = "/home";
@@ -77,7 +77,7 @@ const Login = (props) => {
       try {
         await createaUser(username, password).then((r) => {
           setToken(r.token);
-          setUsername(r.user.username);
+          // setUsername(r.user.username);
         });
       } catch (e) {
         console.log(e);
