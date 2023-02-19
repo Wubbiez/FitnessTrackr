@@ -11,6 +11,7 @@ import Logout from "./components/Logout";
 import CreateActivity from "./components/createActivity";
 import UsersRoutines from "./components/UsersRoutines";
 import MyRoutines from "./components/MyRoutines";
+import Home from "./components/homepage"
 
 export const TOKEN_STORAGE_KEY = "user-token";
 const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -57,7 +58,13 @@ function App() {
       />
       <Main>
         <Routes>
-          <Route exact path="/home" />
+          <Route exact path="/home" 
+          element={
+            <Home></Home>
+          }
+          />
+          
+
           <Route
             path="/login"
             element={
