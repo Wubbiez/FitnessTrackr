@@ -76,7 +76,7 @@ export async function loginUser(username, password) {
   }
 }
 
-export async function createActivity(token, { name, description }) {
+export async function createActivity(token, name, description) {
   try {
     const response = await fetch(
       "http://fitnesstrac-kr.herokuapp.com/api/activities",
@@ -87,24 +87,20 @@ export async function createActivity(token, { name, description }) {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          activity: {
-            name,
-            description,
-          },
+          name: name,
+          description: description,
         }),
       }
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-      });
-
-    console.log(response);
+    );
+    const results = await response.json();
+    console.log("Activity Created!")
+    return results;
   } catch (err) {
-    console.log("failed to make an Activity");
+    console.log("failed to make a activity");
     console.error(err);
   }
 }
+
 
 export async function getAllActivities() {
   try {
