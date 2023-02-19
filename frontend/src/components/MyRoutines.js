@@ -51,15 +51,21 @@ const Routines = styled(Paper)(({ theme }) => ({
   flexDirection: "column",
 }));
 const Activities = styled(Paper)(({ theme }) => ({
-  margin: theme.spacing(2, 2),
+  margin: theme.spacing(4, 2),
   display: "flex",
   flexDirection: "column",
 }));
 const DeleteButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(2, 0, 0),
 }));
+const RemoveActivityButton = styled(Button)(({ theme }) => ({
+  margin: theme.spacing(3, 0, 2),
+}));
 const ActivityButton = styled(Button)(({ theme }) => ({
-  margin: theme.spacing(2, 0, 0),
+  margin: theme.spacing(0, 0, 0),
+}));
+const EditActivityButton = styled(Button)(({ theme }) => ({
+  margin: theme.spacing(0, 0, 0),
 }));
 function MyRoutines(props) {
   const { token, username } = props;
@@ -221,7 +227,18 @@ function MyRoutines(props) {
                   <CardContent>
                     <Typography variant={"h5"}>{routine.name}</Typography>
                     <Typography>{routine.goal}</Typography>
-
+                    <Box display={"flex"} justifyContent={"center"}>
+                      <ActivityButton
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          handleClickOpenActivity(routine.id);
+                        }}
+                      >
+                        Add Activity
+                      </ActivityButton>
+                    </Box>
                     <CardContent>
                       {routine.activities.map((activity) => (
                         <Card component={Activities}>
@@ -229,8 +246,8 @@ function MyRoutines(props) {
                           <div> Description: {activity.description} </div>
                           <div> Count: {activity.count} </div>
                           <div> Duration: {activity.duration} </div>
-                          <Box display={"flex"} justifyContent={"flex-end"}>
-                            <DeleteButton
+                          <Box display={"flex"} justifyContent={"center"}>
+                            <RemoveActivityButton
                               type="submit"
                               variant="contained"
                               color="error"
@@ -245,25 +262,13 @@ function MyRoutines(props) {
                                 );
                               }}
                             >
-                              Delete Routine
-                            </DeleteButton>
+                              Remove Activity
+                            </RemoveActivityButton>
                           </Box>
                         </Card>
                       ))}
                     </CardContent>
 
-                    <Box display={"flex"} justifyContent={"center"}>
-                      <ActivityButton
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          handleClickOpenActivity(routine.id);
-                        }}
-                      >
-                        Add Activity
-                      </ActivityButton>
-                    </Box>
                     <Dialog open={openActivity} onClose={handleCloseActivity}>
                       <DialogTitle>
                         Add activity to the{" "}
