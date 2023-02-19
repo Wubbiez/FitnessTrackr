@@ -14,8 +14,10 @@ import {
   createRoutineActivity,
   getUsersRoutines,
   removeRoutine,
+  removeRoutineActivity,
 } from "../api/apirequests";
 import {
+  Box,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -43,7 +45,12 @@ const Main = styled(Grid)(({ theme }) => ({
   width: "100%",
 }));
 
-const StyledPaper = styled(Paper)(({ theme }) => ({
+const Routines = styled(Paper)(({ theme }) => ({
+  margin: theme.spacing(2, 2),
+  display: "flex",
+  flexDirection: "column",
+}));
+const Activities = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2, 2),
   display: "flex",
   flexDirection: "column",
@@ -64,7 +71,7 @@ function MyRoutines(props) {
   const [routines, setRoutines] = useState([]);
   const [selectedRoutineId, setSelectedRoutineId] = useState(null);
   const [activities, setActivities] = useState([]);
-  const [selectedActivityId, setSelectedActivityId] = useState(null);
+  const [selectedActivityId, setSelectedActivityId] = useState("");
   const [count, setCount] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -131,13 +138,12 @@ function MyRoutines(props) {
           xs={12}
           sm={12}
           md={12}
-          component={StyledPaper}
           elevation={6}
           square
           justify="center" // center horizontally
           alignItems="center" // center vertically
         >
-          <Typography component={"h1"} variant={"h1"} position="sticky">
+          <Typography component={"h1"} variant={"h2"} position="sticky">
             My Routines
           </Typography>
 
@@ -211,32 +217,53 @@ function MyRoutines(props) {
           <Grid container spacing={1}>
             {routines.map((routine, index) => (
               <Grid item xs={12} sm={12} md={12}>
-                <Card component={StyledPaper} key={index}>
+                <Card component={Routines} key={index}>
                   <CardContent>
                     <Typography variant={"h5"}>{routine.name}</Typography>
                     <Typography>{routine.goal}</Typography>
 
                     <CardContent>
                       {routine.activities.map((activity) => (
-                        <Card component={StyledPaper}>
+                        <Card component={Activities}>
                           <div> Name: {activity.name} </div>
                           <div> Description: {activity.description} </div>
                           <div> Count: {activity.count} </div>
                           <div> Duration: {activity.duration} </div>
+                          <Box display={"flex"} justifyContent={"flex-end"}>
+                            <DeleteButton
+                              type="submit"
+                              variant="contained"
+                              color="error"
+                              onClick={() => {
+                                const routineActivity =
+                                  routine.activities.filter(
+                                    (id) => activity.id == id.id
+                                  );
+                                removeRoutineActivity(
+                                  token,
+                                  routineActivity[0].routineActivityId
+                                );
+                              }}
+                            >
+                              Delete Routine
+                            </DeleteButton>
+                          </Box>
                         </Card>
                       ))}
                     </CardContent>
 
-                    <ActivityButton
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {
-                        handleClickOpenActivity(routine.id);
-                      }}
-                    >
-                      Add Activity
-                    </ActivityButton>
+                    <Box display={"flex"} justifyContent={"center"}>
+                      <ActivityButton
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          handleClickOpenActivity(routine.id);
+                        }}
+                      >
+                        Add Activity
+                      </ActivityButton>
+                    </Box>
                     <Dialog open={openActivity} onClose={handleCloseActivity}>
                       <DialogTitle>
                         Add activity to the{" "}
@@ -285,16 +312,19 @@ function MyRoutines(props) {
                         <Button onClick={handleSubmitActivity}>Submit</Button>
                       </DialogActions>
                     </Dialog>
-                    <DeleteButton
-                      type="submit"
-                      variant="contained"
-                      color="error"
-                      onClick={() => {
-                        removeRoutine(token, routine.id);
-                      }}
-                    >
-                      Delete Routine
-                    </DeleteButton>
+
+                    <Box display={"flex"} justifyContent={"flex-end"}>
+                      <DeleteButton
+                        type="submit"
+                        variant="contained"
+                        color="error"
+                        onClick={() => {
+                          removeRoutine(token, routine.id);
+                        }}
+                      >
+                        Delete Routine
+                      </DeleteButton>
+                    </Box>
                   </CardContent>
                 </Card>
               </Grid>

@@ -255,3 +255,80 @@ export async function removeRoutine(token, routineId) {
     console.error(err);
   }
 }
+
+export async function updateRoutine(token, routineId, name, goal, isPublic) {
+  try {
+    const response = await fetch(
+      `http://fitnesstrac-kr.herokuapp.com/api/routines/${routineId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: name,
+          goal: goal,
+          isPublic: isPublic,
+        }),
+      }
+    );
+    const results = await response.json();
+    return results;
+  } catch (err) {
+    console.log("failed to update routine");
+    console.error(err);
+  }
+}
+
+export async function updateRoutineActivity(
+  token,
+  routineId,
+  activityId,
+  count,
+  duration
+) {
+  try {
+    const response = await fetch(
+      `http://fitnesstrac-kr.herokuapp.com/api/routines/${routineId}/activities/${activityId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          routineId: routineId,
+          activityId: activityId,
+          count: count,
+          duration: duration,
+        }),
+      }
+    );
+    const results = await response.json();
+    return results;
+  } catch (err) {
+    console.log("failed to update routine activity");
+    console.error(err);
+  }
+}
+
+export async function removeRoutineActivity(token, activityId) {
+  try {
+    const response = await fetch(
+      `http://fitnesstrac-kr.herokuapp.com/api/routine_activities/${activityId}/`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const results = await response.json();
+    return results;
+  } catch (err) {
+    console.log("failed to delete routine activity");
+    console.error(err);
+  }
+}
