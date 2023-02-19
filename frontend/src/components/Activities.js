@@ -27,10 +27,14 @@ const ActivitiesList = (props) => {
     setOpen(false);
 
   };
-  const handleSubmit = (props) => {
-    const {name, description} = props
+  const handleSubmit = (event) => {
+    event.preventDefault();
     setOpen(false);
-    createActivity({name, description})
+    try {
+      createActivity(token, name, description);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
 
@@ -47,6 +51,9 @@ const ActivitiesList = (props) => {
     };
     getActivities();
   }, []);
+
+  const [name, setName] = React.useState("");
+  const [description, setDescription] = React.useState("")
 
 
   if (token) {
@@ -71,6 +78,10 @@ const ActivitiesList = (props) => {
                 type="name"
                 fullWidth
                 variant="standard"
+                value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);}
+                  }
               />
               <TextField
                 autoFocus
@@ -80,6 +91,10 @@ const ActivitiesList = (props) => {
                 type="description"
                 fullWidth
                 variant="standard"
+                value={description}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
               />
             </DialogContent>
             <DialogActions>
