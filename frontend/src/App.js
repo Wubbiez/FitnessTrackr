@@ -13,7 +13,9 @@ import UsersRoutines from "./components/UsersRoutines";
 import MyRoutines from "./components/MyRoutines";
 
 export const TOKEN_STORAGE_KEY = "user-token";
+export const USER_STORAGE_KEY = "user-username";
 const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
+const storageUser = localStorage.getItem(USER_STORAGE_KEY);
 
 const Main = styled(Grid)({
   display: "flex",
@@ -25,7 +27,7 @@ const Main = styled(Grid)({
 function App() {
   const { routineCreator } = useParams();
   const [token, setToken] = useState(storageToken);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(storageUser);
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [description, setDescription] = useState("");
@@ -114,7 +116,7 @@ function App() {
           />
           <Route
             path="/myroutines"
-            element={<MyRoutines username={username} />}
+            element={<MyRoutines username={username} token={token} />}
           />
         </Routes>
       </Main>

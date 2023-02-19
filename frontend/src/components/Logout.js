@@ -7,7 +7,7 @@ function Logout(props) {
   function wipeData() {
     setToken("");
     localStorage.setItem("user-token", "");
-    localStorage.setItem("user-name", "");
+    localStorage.setItem("user-username", "");
     setUsername("");
   }
 
