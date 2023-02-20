@@ -113,6 +113,7 @@ function MyRoutines(props) {
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openRoutine, setOpenRoutine] = React.useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [selectedRoutineActivity, setSelectedRoutineActivity] = useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -219,14 +220,6 @@ function MyRoutines(props) {
     setLoaded(true);
   }, [token, loaded]);
 
-  const selectedRoutine = routines.find(
-    (item) => item.id === selectedRoutineId
-  );
-
-  let selectedActivity = routines.find(
-    (item) => item.id === selectedActivityId
-  );
-
   const handleSelectChange = (event) => {
     event.preventDefault();
     setSelectedActivityId(event.target.value);
@@ -326,307 +319,323 @@ function MyRoutines(props) {
           ) : null}
 
           <Grid container spacing={1}>
-            {routines.map((routine, index) => (
-              <Grid item xs={12} sm={12} md={12}>
-                <Card component={Routines} key={index}>
-                  <CardContent>
-                    <Box>
-                      <Typography variant={"h5"}>{routine.name}</Typography>
-                      <Typography>{routine.goal}</Typography>
-                    </Box>
-                    <Box component={tableHeader}>
-                      <Typography variant={"h5"}>Activities:</Typography>
-                      <Box display={"flex"} justifyContent={"center"}>
-                        <ActivityButton
-                          type="submit"
-                          variant="contained"
-                          color="primary"
-                          onClick={() => {
-                            handleClickOpenActivity(routine.id);
-                          }}
-                        >
-                          Add Activity
-                        </ActivityButton>
-                      </Box>
+            {routines
+              ? routines.map((routine, index) => (
+                  <Grid item xs={12} sm={12} md={12}>
+                    <Card component={Routines} key={index}>
                       <CardContent>
-                        {routines
-                          ? routine.activities.map((activity) => (
-                              <Card component={Activities}>
-                                <Box component={ActivityDescriptions}>
-                                  <Typography>
-                                    {" "}
-                                    Activity Name: {activity.name}{" "}
-                                  </Typography>
-                                  <Typography>
-                                    Description: {activity.description}
-                                  </Typography>
-                                  <Typography>
-                                    Count: {activity.count}
-                                  </Typography>
-                                  <Typography>
-                                    Duration: {activity.duration}
-                                  </Typography>
-                                </Box>
-                                <Box display={"flex"} justifyContent={"center"}>
-                                  <EditActivityButton
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() => {
-                                      const routineActivity =
-                                        routine.activities.filter(
-                                          (id) => activity.id == id.id
-                                        );
-                                      handleClickEditActivity(
-                                        routineActivity[0].routineActivityId
-                                      );
-                                    }}
-                                  >
-                                    Edit Activity
-                                  </EditActivityButton>
-
-                                  <Dialog
-                                    open={openEdit}
-                                    onClose={handleCloseEdit}
-                                    PaperProps={{
-                                      style: {
-                                        backgroundColor: "white",
-                                        boxShadow: "none",
-                                      },
-                                    }}
-                                  >
-                                    <DialogTitle>Edit activity:</DialogTitle>
-                                    <DialogContent>
-                                      <DialogContentText>
-                                        Choose which changes you want to make
-                                        below
-                                      </DialogContentText>
-                                      <TextField
-                                        autoFocus
-                                        margin="dense"
-                                        id="count"
-                                        label="count"
-                                        type="count"
-                                        fullWidth
-                                        variant="standard"
-                                        value={count}
-                                        onChange={(e) => {
-                                          setCount(e.target.value);
-                                        }}
-                                      />
-                                      <TextField
-                                        autoFocus
-                                        margin="dense"
-                                        id="duration"
-                                        label="duration"
-                                        type="duration"
-                                        fullWidth
-                                        variant="standard"
-                                        value={duration}
-                                        onChange={(e) => {
-                                          setDuration(e.target.value);
-                                        }}
-                                      />
-                                    </DialogContent>
-                                    <DialogActions>
-                                      <Button onClick={handleCloseEdit}>
-                                        Cancel
-                                      </Button>
-                                      <Button onClick={handleEditSubmit}>
-                                        Submit
-                                      </Button>
-                                    </DialogActions>
-                                  </Dialog>
-
-                                  <RemoveActivityButton
-                                    type="submit"
-                                    variant="contained"
-                                    color="error"
-                                    onClick={() => {
-                                      const routineActivity =
-                                        routine.activities.filter(
-                                          (id) => activity.id == id.id
-                                        );
-                                      removeRoutineActivity(
-                                        token,
-                                        routineActivity[0].routineActivityId
-                                      );
-                                      setLoaded(false);
-                                    }}
-                                  >
-                                    Remove Activity
-                                  </RemoveActivityButton>
-                                </Box>
-                              </Card>
-                            ))
-                          : null}
-                      </CardContent>
-                    </Box>
-
-                    <Dialog
-                      open={openActivity}
-                      onClose={handleCloseActivity}
-                      PaperProps={{
-                        style: {
-                          backgroundColor: "white",
-                          boxShadow: "none",
-                        },
-                      }}
-                    >
-                      <DialogTitle>
-                        Add activity to the{" "}
-                        {selectedRoutine ? selectedRoutine.name : null} routine
-                      </DialogTitle>
-                      <DialogContent>
-                        <Box
-                          display={"flex"}
-                          justifyContent={"center"}
-                          alignItems={"center"}
-                        >
-                          <Typography>Select an Activity:</Typography>
-                          <Select
-                            value={selectedActivityId}
-                            onChange={handleSelectChange}
-                          >
-                            {activities.map((activity) => (
-                              <StyledMenuItem value={activity.id}>
-                                {activity.name}
-                              </StyledMenuItem>
-                            ))}
-                          </Select>
+                        <Box>
+                          <Typography variant={"h5"}>{routine.name}</Typography>
+                          <Typography>{routine.goal}</Typography>
                         </Box>
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="count"
-                          label="count"
-                          type="count"
-                          fullWidth
-                          variant="standard"
-                          value={count}
-                          onChange={(e) => {
-                            setCount(e.target.value);
-                          }}
-                        />
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="duration"
-                          label="duration"
-                          type="duration"
-                          fullWidth
-                          variant="standard"
-                          value={duration}
-                          onChange={(e) => {
-                            setDuration(e.target.value);
-                          }}
-                        />
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleCloseActivity}>Cancel</Button>
-                        <Button onClick={handleSubmitActivity}>Submit</Button>
-                      </DialogActions>
-                    </Dialog>
-
-                    <Box display={"flex"} justifyContent={"space-between"}>
-                      <EditRoutineButton
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          handleClickEditRoutine(routine.id);
-                        }}
-                      >
-                        Edit Routine
-                      </EditRoutineButton>
-
-                      <Dialog
-                        open={openRoutine}
-                        onClose={handleCloseRoutine}
-                        PaperProps={{
-                          style: {
-                            backgroundColor: "white",
-                            boxShadow: "none",
-                          },
-                        }}
-                      >
-                        <DialogTitle>Edit Routine:</DialogTitle>
-                        <DialogContent>
-                          <DialogContentText>
-                            Choose which changes you want to make below
-                          </DialogContentText>
-                          <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="name"
-                            type="name"
-                            fullWidth
-                            variant="standard"
-                            defaultValue={name}
-                            onChange={(e) => {
-                              setName(e.target.value);
-                            }}
-                          />
-                          <TextField
-                            autoFocus
-                            margin="dense"
-                            id="goal"
-                            label="goal"
-                            type="goal"
-                            fullWidth
-                            variant="standard"
-                            defaultValue={goal}
-                            onChange={(e) => {
-                              setGoal(e.target.value);
-                            }}
-                          />
-                          <FormControl>
-                            <RadioGroup
-                              aria-labelledby="demo-radio-buttons-group-label"
-                              value={isPublic.toString()}
-                              name="radio-buttons-group"
-                              onChange={(e) => {
-                                setIsPublic(e.target.value === "true");
+                        <Box component={tableHeader}>
+                          <Typography variant={"h5"}>Activities:</Typography>
+                          <Box display={"flex"} justifyContent={"center"}>
+                            <ActivityButton
+                              type="submit"
+                              variant="contained"
+                              color="primary"
+                              onClick={() => {
+                                handleClickOpenActivity(routine.id);
                               }}
                             >
-                              <FormControlLabel
-                                value="true"
-                                control={<Radio />}
-                                label="public"
-                              />
-                              <FormControlLabel
-                                value="false"
-                                control={<Radio />}
-                                label="private"
-                              />
-                            </RadioGroup>
-                          </FormControl>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button onClick={handleCloseRoutine}>Cancel</Button>
-                          <Button onClick={handleRoutineEditSubmit}>
-                            Submit
-                          </Button>
-                        </DialogActions>
-                      </Dialog>
+                              Add Activity
+                            </ActivityButton>
+                          </Box>
+                          <CardContent>
+                            {routines
+                              ? routine.activities.map((activity) => (
+                                  <Card component={Activities}>
+                                    <Box component={ActivityDescriptions}>
+                                      <Typography>
+                                        {" "}
+                                        Activity Name: {activity.name}{" "}
+                                      </Typography>
+                                      <Typography>
+                                        Description: {activity.description}
+                                      </Typography>
+                                      <Typography>
+                                        Count: {activity.count}
+                                      </Typography>
+                                      <Typography>
+                                        Duration: {activity.duration}
+                                      </Typography>
+                                    </Box>
+                                    <Box
+                                      display={"flex"}
+                                      justifyContent={"center"}
+                                    >
+                                      <EditActivityButton
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => {
+                                          const routineActivity =
+                                            routine.activities.filter(
+                                              (id) => activity.id == id.id
+                                            );
+                                          handleClickEditActivity(
+                                            routineActivity[0].routineActivityId
+                                          );
+                                        }}
+                                      >
+                                        Edit Activity
+                                      </EditActivityButton>
 
-                      <DeleteButton
-                        type="submit"
-                        variant="contained"
-                        color="error"
-                        onClick={() => {
-                          removeRoutine(token, routine.id);
-                          setLoaded(false);
-                        }}
-                      >
-                        Delete Routine
-                      </DeleteButton>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+                                      <Dialog
+                                        open={openEdit}
+                                        onClose={handleCloseEdit}
+                                        PaperProps={{
+                                          style: {
+                                            backgroundColor: "white",
+                                            boxShadow: "none",
+                                          },
+                                        }}
+                                      >
+                                        <DialogTitle>
+                                          Edit activity:
+                                        </DialogTitle>
+                                        <DialogContent>
+                                          <DialogContentText>
+                                            Choose which changes you want to
+                                            make below
+                                          </DialogContentText>
+                                          <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            id="count"
+                                            label="count"
+                                            type="count"
+                                            fullWidth
+                                            variant="standard"
+                                            value={count}
+                                            onChange={(e) => {
+                                              setCount(e.target.value);
+                                            }}
+                                          />
+                                          <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            id="duration"
+                                            label="duration"
+                                            type="duration"
+                                            fullWidth
+                                            variant="standard"
+                                            value={duration}
+                                            onChange={(e) => {
+                                              setDuration(e.target.value);
+                                            }}
+                                          />
+                                        </DialogContent>
+                                        <DialogActions>
+                                          <Button onClick={handleCloseEdit}>
+                                            Cancel
+                                          </Button>
+                                          <Button onClick={handleEditSubmit}>
+                                            Submit
+                                          </Button>
+                                        </DialogActions>
+                                      </Dialog>
+
+                                      <RemoveActivityButton
+                                        type="submit"
+                                        variant="contained"
+                                        color="error"
+                                        onClick={() => {
+                                          const routineActivity =
+                                            routine.activities.filter(
+                                              (id) => activity.id == id.id
+                                            );
+                                          setSelectedRoutineActivity(
+                                            routineActivity
+                                          );
+                                          removeRoutineActivity(
+                                            token,
+                                            routineActivity[0].routineActivityId
+                                          );
+                                          setLoaded(false);
+                                        }}
+                                      >
+                                        Remove Activity
+                                      </RemoveActivityButton>
+                                    </Box>
+                                  </Card>
+                                ))
+                              : null}
+                          </CardContent>
+                        </Box>
+
+                        <Dialog
+                          open={openActivity}
+                          onClose={handleCloseActivity}
+                          PaperProps={{
+                            style: {
+                              backgroundColor: "white",
+                              boxShadow: "none",
+                            },
+                          }}
+                        >
+                          <DialogTitle>
+                            Add activity to the {selectedRoutineActivity.name}{" "}
+                            routine
+                          </DialogTitle>
+                          <DialogContent>
+                            <Box
+                              display={"flex"}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                            >
+                              <Typography>Select an Activity:</Typography>
+                              <Select
+                                value={selectedActivityId}
+                                onChange={handleSelectChange}
+                              >
+                                {activities.map((activity) => (
+                                  <StyledMenuItem value={activity.id}>
+                                    {activity.name}
+                                  </StyledMenuItem>
+                                ))}
+                              </Select>
+                            </Box>
+                            <TextField
+                              autoFocus
+                              margin="dense"
+                              id="count"
+                              label="count"
+                              type="count"
+                              fullWidth
+                              variant="standard"
+                              value={count}
+                              onChange={(e) => {
+                                setCount(e.target.value);
+                              }}
+                            />
+                            <TextField
+                              autoFocus
+                              margin="dense"
+                              id="duration"
+                              label="duration"
+                              type="duration"
+                              fullWidth
+                              variant="standard"
+                              value={duration}
+                              onChange={(e) => {
+                                setDuration(e.target.value);
+                              }}
+                            />
+                          </DialogContent>
+                          <DialogActions>
+                            <Button onClick={handleCloseActivity}>
+                              Cancel
+                            </Button>
+                            <Button onClick={handleSubmitActivity}>
+                              Submit
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
+
+                        <Box display={"flex"} justifyContent={"space-between"}>
+                          <EditRoutineButton
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                              handleClickEditRoutine(routine.id);
+                            }}
+                          >
+                            Edit Routine
+                          </EditRoutineButton>
+
+                          <Dialog
+                            open={openRoutine}
+                            onClose={handleCloseRoutine}
+                            PaperProps={{
+                              style: {
+                                backgroundColor: "white",
+                                boxShadow: "none",
+                              },
+                            }}
+                          >
+                            <DialogTitle>Edit Routine:</DialogTitle>
+                            <DialogContent>
+                              <DialogContentText>
+                                Choose which changes you want to make below
+                              </DialogContentText>
+                              <TextField
+                                autoFocus
+                                margin="dense"
+                                id="name"
+                                label="name"
+                                type="name"
+                                fullWidth
+                                variant="standard"
+                                defaultValue={name}
+                                onChange={(e) => {
+                                  setName(e.target.value);
+                                }}
+                              />
+                              <TextField
+                                autoFocus
+                                margin="dense"
+                                id="goal"
+                                label="goal"
+                                type="goal"
+                                fullWidth
+                                variant="standard"
+                                defaultValue={goal}
+                                onChange={(e) => {
+                                  setGoal(e.target.value);
+                                }}
+                              />
+                              <FormControl>
+                                <RadioGroup
+                                  aria-labelledby="demo-radio-buttons-group-label"
+                                  value={isPublic.toString()}
+                                  name="radio-buttons-group"
+                                  onChange={(e) => {
+                                    setIsPublic(e.target.value === "true");
+                                  }}
+                                >
+                                  <FormControlLabel
+                                    value="true"
+                                    control={<Radio />}
+                                    label="public"
+                                  />
+                                  <FormControlLabel
+                                    value="false"
+                                    control={<Radio />}
+                                    label="private"
+                                  />
+                                </RadioGroup>
+                              </FormControl>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={handleCloseRoutine}>
+                                Cancel
+                              </Button>
+                              <Button onClick={handleRoutineEditSubmit}>
+                                Submit
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
+
+                          <DeleteButton
+                            type="submit"
+                            variant="contained"
+                            color="error"
+                            onClick={() => {
+                              removeRoutine(token, routine.id);
+                              setLoaded(false);
+                            }}
+                          >
+                            Delete Routine
+                          </DeleteButton>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))
+              : null}
           </Grid>
         </Main>
       </Root>

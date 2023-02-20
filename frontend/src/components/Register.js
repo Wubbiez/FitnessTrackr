@@ -41,7 +41,10 @@ const Login = (props) => {
   const [loginText, setLoginText] = useState("Sign in");
   const [showButton, setShowButton] = useState(true);
   const [buttonText, setButtonText] = useState("Sign In");
-  useEffect(() => {}, [token]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+  }, [token]);
 
   const handleClick = () => {
     setShowButton(!showButton);
@@ -67,9 +70,9 @@ const Login = (props) => {
     }
     if (loginText === "Register") {
       try {
-        await createaUser(username, password).then((r) => {
-          setToken(r.token);
-        });
+        await createaUser(username, password);
+        window.location.href = "/login";
+        setLoading(false);
       } catch (e) {
         console.log(e);
       } finally {

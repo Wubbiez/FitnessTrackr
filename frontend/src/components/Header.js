@@ -1,9 +1,11 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { useEffect } from "react";
+import Logout from "./Logout";
+import { Link } from "react-router-dom";
 
 function Header(props) {
-  const { token } = props;
+  const { token, setToken, setUsername } = props;
   useEffect(() => {}, [token]);
 
   return (
@@ -57,15 +59,20 @@ function Header(props) {
               Login/Register
             </Button>
           ) : null}
-
-          <Button
-            onClick={() => {
-              window.location.href = "/logout";
-            }}
-            color="inherit"
-          >
-            Logout
-          </Button>
+          {token ? (
+            <Button
+              onClick={() => {
+                setToken("");
+                localStorage.setItem("user-token", "");
+                localStorage.setItem("user-username", "");
+                setUsername("");
+                window.location.href = "/home";
+              }}
+              color="inherit"
+            >
+              Logout
+            </Button>
+          ) : null}
         </Box>
       </Toolbar>
     </AppBar>

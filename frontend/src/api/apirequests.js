@@ -14,13 +14,13 @@ export async function createaUser(username, password) {
       }
     );
     const results = await response.json();
-    if (results.token) {
-      localStorage.setItem("user-token", results.token);
-      return localStorage.getItem("user-token");
+    if (results.message) {
+      alert(results.message);
     }
     if (results.error) {
       alert(results.error);
     }
+    return results;
   } catch (e) {
     throw ("err", e);
   }
@@ -39,6 +39,7 @@ export async function getUser(token) {
       }
     );
     const results = await response.json();
+
     return results;
   } catch (e) {
     throw ("err", e);
@@ -61,6 +62,9 @@ export async function loginUser(username, password) {
       }
     );
     const results = await response.json();
+    if (results.message) {
+      alert(results.message);
+    }
     if (results.token) {
       const data = {
         token: results.token,
