@@ -96,6 +96,9 @@ export async function createActivity(token, name, description) {
       }
     );
     const results = await response.json();
+    if (results.error) {
+      alert(results.error);
+    }
     console.log("Activity Created!");
     return results;
   } catch (err) {
@@ -195,6 +198,9 @@ export async function createRoutine(token, name, goal, isPublic) {
       }
     );
     const results = await response.json();
+    if (results.error) {
+      alert(results.error);
+    }
     return results;
   } catch (err) {
     console.log("failed to make a Routine");
@@ -274,41 +280,12 @@ export async function updateRoutine(token, routineId, name, goal, isPublic) {
       }
     );
     const results = await response.json();
+    if (results.error) {
+      alert(results.error);
+    }
     return results;
   } catch (err) {
     console.log("failed to update routine");
-    console.error(err);
-  }
-}
-
-export async function updateRoutineActivity(
-  token,
-  routineId,
-  activityId,
-  count,
-  duration
-) {
-  try {
-    const response = await fetch(
-      `https://fitnesstrac-kr.herokuapp.com/api/routines/${routineId}/activities/${activityId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          routineId: routineId,
-          activityId: activityId,
-          count: count,
-          duration: duration,
-        }),
-      }
-    );
-    const results = await response.json();
-    return results;
-  } catch (err) {
-    console.log("failed to update routine activity");
     console.error(err);
   }
 }
@@ -375,6 +352,9 @@ export async function editRoutine(token, routineId, name, goal, isPublic) {
       }
     );
     const results = await response.json();
+    if (results.error) {
+      alert(results.error);
+    }
     return results;
   } catch (err) {
     console.log("failed to update routine");
