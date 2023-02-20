@@ -1,21 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material";
 import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
 import { createaUser, loginUser } from "../api/apirequests";
 const Root = styled(Grid)({
   maxHeight: "90vh",
 });
-
-const Image = styled(Grid)(({ theme }) => ({
-  backgroundImage: "url(https://source.unsplash.com/random)",
-  backgroundRepeat: "no-repeat",
-  backgroundColor:
-    theme.palette.mode === "light"
-      ? theme.palette.grey[50]
-      : theme.palette.grey[900],
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-}));
 
 const Main = styled(Grid)(({ theme }) => ({
   margin: theme.spacing(8, 4),
@@ -52,6 +41,7 @@ const Login = (props) => {
   const [loginText, setLoginText] = useState("Sign in");
   const [showButton, setShowButton] = useState(true);
   const [buttonText, setButtonText] = useState("Sign In");
+  useEffect(() => {}, [token]);
 
   const handleClick = () => {
     setShowButton(!showButton);
@@ -64,30 +54,33 @@ const Login = (props) => {
         await loginUser(username, password)
           .then((r) => {
             setToken(r.token);
-            // setUsername(r.user.username);
           })
           .then(() => {
             window.location.href = "/home";
           });
       } catch (e) {
         console.log(e);
+      } finally {
+        setUsername("");
+        setPassword("");
       }
     }
     if (loginText === "Register") {
       try {
         await createaUser(username, password).then((r) => {
           setToken(r.token);
-          // setUsername(r.user.username);
         });
       } catch (e) {
         console.log(e);
+      } finally {
+        setUsername("");
+        setPassword("");
       }
     }
   }
 
   return (
     <Root container justifyContent={"center"}>
-      {/*<Image item xs={false} sm={4} md={7} />*/}
       <Main
         item
         xs={12}

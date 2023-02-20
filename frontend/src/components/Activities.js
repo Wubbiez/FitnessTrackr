@@ -2,20 +2,18 @@ import { useEffect, useState } from "react";
 import styles from "./Activities.module.css";
 import * as React from "react";
 import { createActivity } from "../api/apirequests";
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 // import { useHistory } from 'react-router-dom';
 //needs work
 
-
-
 const ActivitiesList = (props) => {
-  const { token } = props
+  const { token } = props;
   const [activities, setActivities] = useState([]);
   const [open, setOpen] = React.useState(false);
 
@@ -25,7 +23,6 @@ const ActivitiesList = (props) => {
 
   const handleClose = () => {
     setOpen(false);
-
   };
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -37,13 +34,10 @@ const ActivitiesList = (props) => {
     }
   };
 
-
-
-
   useEffect(() => {
     const getActivities = async () => {
       const response = await fetch(
-        `http://fitnesstrac-kr.herokuapp.com/api/activities`
+        `https://fitnesstrac-kr.herokuapp.com/api/activities`
       );
       const data = await response.json();
       setActivities(data);
@@ -53,8 +47,7 @@ const ActivitiesList = (props) => {
   }, []);
 
   const [name, setName] = React.useState("");
-  const [description, setDescription] = React.useState("")
-
+  const [description, setDescription] = React.useState("");
 
   if (token) {
     return (
@@ -79,9 +72,9 @@ const ActivitiesList = (props) => {
                 fullWidth
                 variant="standard"
                 value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);}
-                  }
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
               />
               <TextField
                 autoFocus
@@ -92,9 +85,9 @@ const ActivitiesList = (props) => {
                 fullWidth
                 variant="standard"
                 value={description}
-                  onChange={(e) => {
-                    setDescription(e.target.value);
-                  }}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
               />
             </DialogContent>
             <DialogActions>
@@ -104,14 +97,14 @@ const ActivitiesList = (props) => {
           </Dialog>
         </div>
         <body className={styles.main}>
-        <div className={styles.allActivities}>
-          {activities.map((activity) => (
-            <div key={activity.id} className={styles.activities}>
-              <h3>{activity.name}</h3>
-              <div>{activity.description}</div>
-            </div>
-          ))}
-        </div>
+          <div className={styles.allActivities}>
+            {activities.map((activity) => (
+              <div key={activity.id} className={styles.activities}>
+                <h3>{activity.name}</h3>
+                <div>{activity.description}</div>
+              </div>
+            ))}
+          </div>
         </body>
       </>
     );
@@ -120,20 +113,18 @@ const ActivitiesList = (props) => {
       <>
         <h1 className={styles.head}>Activities</h1>
         <body className={styles.main}>
-        <div className={styles.allActivities}>
-          {activities.map((activity) => (
-            <div key={activity.id} className={styles.activities}>
-              <h3>{activity.name}</h3>
-              <div>{activity.description}</div>
-            </div>
-            
-          ))}
-        </div>
+          <div className={styles.allActivities}>
+            {activities.map((activity) => (
+              <div key={activity.id} className={styles.activities}>
+                <h3>{activity.name}</h3>
+                <div>{activity.description}</div>
+              </div>
+            ))}
+          </div>
         </body>
       </>
     );
-
   }
-}
+};
 
-export default ActivitiesList
+export default ActivitiesList;

@@ -11,7 +11,7 @@ import Logout from "./components/Logout";
 import CreateActivity from "./components/createActivity";
 import UsersRoutines from "./components/UsersRoutines";
 import MyRoutines from "./components/MyRoutines";
-import Home from "./components/homepage"
+import Home from "./components/homepage";
 
 export const TOKEN_STORAGE_KEY = "user-token";
 export const USER_STORAGE_KEY = "user-username";
@@ -34,20 +34,6 @@ function App() {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
 
-  //   const setValue = (e) => {
-  //     return (event) => {
-  //         e(event.target.value)
-  //     }
-  // }
-
-  // useEffect(() => {
-  //   const storageToken = localStorage.getItem(TOKEN_STORAGE_KEY);
-  //   setToken(storageToken);
-  //   getUser(token).then((r) => {
-  //     setUser(r);
-  //   });
-  // }, [token]);
-
   return (
     <>
       <Header
@@ -60,11 +46,7 @@ function App() {
       />
       <Main>
         <Routes>
-          <Route path="/"
-           element={
-              <Home />
-            }
-          />
+          <Route path="/" element={<Home />} />
 
           <Route
             path="/login"

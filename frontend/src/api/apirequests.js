@@ -19,7 +19,9 @@ export async function createaUser(username, password) {
       localStorage.setItem("user-token", results.token);
       return localStorage.getItem("user-token");
     }
-    alert(password);
+    if (results.error) {
+      alert(results.error);
+    }
   } catch (e) {
     throw ("err", e);
   }
@@ -60,7 +62,6 @@ export async function loginUser(username, password) {
       }
     );
     const results = await response.json();
-    console.log(results);
     if (results.token) {
       const data = {
         token: results.token,
@@ -70,6 +71,9 @@ export async function loginUser(username, password) {
       localStorage.setItem("user-username", results.user.username);
       console.log(data);
       return data;
+    }
+    if (results.error) {
+      alert(results.error);
     }
   } catch (e) {
     throw ("err", e);
