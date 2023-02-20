@@ -617,6 +617,7 @@ function MyRoutines(props) {
                         color="error"
                         onClick={() => {
                           removeRoutine(token, routine.id);
+                          setLoaded(false);
                         }}
                       >
                         Delete Routine
