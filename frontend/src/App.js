@@ -60,12 +60,11 @@ function App() {
       />
       <Main>
         <Routes>
-          <Route exact path="/home" 
-          element={
-            <Home></Home>
-          }
+          <Route path="/"
+           element={
+              <Home />
+            }
           />
-          
 
           <Route
             path="/login"

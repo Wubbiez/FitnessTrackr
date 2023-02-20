@@ -15,7 +15,7 @@ function Header(props) {
         <Box display="flex" flexDirection="row">
           <Button
             onClick={() => {
-              window.location.href = "/home";
+              window.location.href = "/";
             }}
             color="inherit"
           >

@@ -59,7 +59,7 @@ const ActivitiesList = (props) => {
   if (token) {
     return (
       <>
-        <h1 className={styles.title}>Activities</h1>
+        <h1 className={styles.head}>Activities</h1>
         <div>
           <Button variant="outlined" onClick={handleClickOpen}>
             Create New Activity
@@ -103,29 +103,33 @@ const ActivitiesList = (props) => {
             </DialogActions>
           </Dialog>
         </div>
-
-        <div className={styles.routines}>
+        <body className={styles.main}>
+        <div className={styles.allActivities}>
           {activities.map((activity) => (
-            <div key={activity.id} className={styles.title}>
+            <div key={activity.id} className={styles.activities}>
               <h3>{activity.name}</h3>
               <div>{activity.description}</div>
             </div>
           ))}
         </div>
+        </body>
       </>
     );
   } else {
     return (
       <>
-        <h1 className={styles.title}>Activities</h1>
-        <div className={styles.routines}>
+        <h1 className={styles.head}>Activities</h1>
+        <body className={styles.main}>
+        <div className={styles.allActivities}>
           {activities.map((activity) => (
-            <div key={activity.id} className={styles.title}>
+            <div key={activity.id} className={styles.activities}>
               <h3>{activity.name}</h3>
               <div>{activity.description}</div>
             </div>
+            
           ))}
         </div>
+        </body>
       </>
     );
 
