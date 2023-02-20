@@ -57,7 +57,16 @@ const ActivitiesList = (props) => {
           <Button variant="outlined" onClick={handleClickOpen}>
             Create New Activity
           </Button>
-          <Dialog open={open} onClose={handleClose}>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+              style: {
+                backgroundColor: "white",
+                boxShadow: "none",
+              },
+            }}
+          >
             <DialogTitle>Create a new Activity</DialogTitle>
             <DialogContent>
               <DialogContentText>

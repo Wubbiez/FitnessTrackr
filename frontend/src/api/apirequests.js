@@ -1,5 +1,4 @@
 export async function createaUser(username, password) {
-  console.log(username, password);
   try {
     const response = await fetch(
       "https://fitnesstrac-kr.herokuapp.com/api/users/register",
