@@ -28,6 +28,9 @@ const theme = createTheme({
     error: {
       main: colors.red.A400,
     },
+    background: {
+      paper: "softblue",
+    },
   },
 });
 
