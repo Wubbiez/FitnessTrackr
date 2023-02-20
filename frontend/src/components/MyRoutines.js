@@ -12,6 +12,7 @@ import {
 import {
   createRoutine,
   createRoutineActivity,
+  editRoutineActivity,
   getUsersRoutines,
   removeRoutine,
   removeRoutineActivity,
@@ -80,6 +81,7 @@ function MyRoutines(props) {
   const [selectedActivityId, setSelectedActivityId] = useState("");
   const [count, setCount] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [openEdit, setOpenEdit] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -90,12 +92,31 @@ function MyRoutines(props) {
     setOpenActivity(true);
   };
 
+  const handleClickEditActivity = (activityId) => {
+    setSelectedActivityId(activityId);
+    setOpenEdit(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
   const handleCloseActivity = () => {
     setSelectedRoutineId(null);
     setOpenActivity(false);
+  };
+
+  const handleCloseEdit = () => {
+    setSelectedActivityId(null);
+    setOpenEdit(false);
+  };
+  const handleEditSubmit = (event) => {
+    event.preventDefault();
+    setOpenActivity(false);
+    try {
+      editRoutineActivity(token, selectedActivityId, count, duration);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleSubmit = (event) => {
@@ -111,13 +132,7 @@ function MyRoutines(props) {
     event.preventDefault();
     setOpenActivity(false);
     try {
-      createRoutineActivity(
-        token,
-        selectedRoutine.id,
-        selectedActivityId,
-        count,
-        duration
-      );
+      createRoutineActivity(token, selectedActivityId, count, duration);
     } catch (error) {
       console.error(error);
     }
@@ -240,33 +255,99 @@ function MyRoutines(props) {
                       </ActivityButton>
                     </Box>
                     <CardContent>
-                      {routine.activities.map((activity) => (
-                        <Card component={Activities}>
-                          <div> Name: {activity.name} </div>
-                          <div> Description: {activity.description} </div>
-                          <div> Count: {activity.count} </div>
-                          <div> Duration: {activity.duration} </div>
-                          <Box display={"flex"} justifyContent={"center"}>
-                            <RemoveActivityButton
-                              type="submit"
-                              variant="contained"
-                              color="error"
-                              onClick={() => {
-                                const routineActivity =
-                                  routine.activities.filter(
-                                    (id) => activity.id == id.id
-                                  );
-                                removeRoutineActivity(
-                                  token,
-                                  routineActivity[0].routineActivityId
-                                );
-                              }}
-                            >
-                              Remove Activity
-                            </RemoveActivityButton>
-                          </Box>
-                        </Card>
-                      ))}
+                      {routines
+                        ? routine.activities.map((activity) => (
+                            <Card component={Activities}>
+                              <div> Name: {activity.name} </div>
+                              <div> Description: {activity.description} </div>
+                              <div> Count: {activity.count} </div>
+                              <div> Duration: {activity.duration} </div>
+                              <Box display={"flex"} justifyContent={"center"}>
+                                <EditActivityButton
+                                  type="submit"
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() => {
+                                    const routineActivity =
+                                      routine.activities.filter(
+                                        (id) => activity.id == id.id
+                                      );
+                                    handleClickEditActivity(
+                                      routineActivity[0].routineActivityId
+                                    );
+                                  }}
+                                >
+                                  Edit Activity
+                                </EditActivityButton>
+
+                                <Dialog
+                                  open={openEdit}
+                                  onClose={handleCloseEdit}
+                                >
+                                  <DialogTitle>Edit this activity</DialogTitle>
+                                  <DialogContent>
+                                    <DialogContentText>
+                                      Choose which changes you want to make
+                                      below
+                                    </DialogContentText>
+                                    <TextField
+                                      autoFocus
+                                      margin="dense"
+                                      id="count"
+                                      label="count"
+                                      type="count"
+                                      fullWidth
+                                      variant="standard"
+                                      value={count}
+                                      onChange={(e) => {
+                                        setCount(e.target.value);
+                                      }}
+                                    />
+                                    <TextField
+                                      autoFocus
+                                      margin="dense"
+                                      id="duration"
+                                      label="duration"
+                                      type="duration"
+                                      fullWidth
+                                      variant="standard"
+                                      value={duration}
+                                      onChange={(e) => {
+                                        setDuration(e.target.value);
+                                      }}
+                                    />
+                                  </DialogContent>
+                                  <DialogActions>
+                                    <Button onClick={handleCloseEdit}>
+                                      Cancel
+                                    </Button>
+                                    <Button onClick={handleEditSubmit}>
+                                      Submit
+                                    </Button>
+                                  </DialogActions>
+                                </Dialog>
+
+                                <RemoveActivityButton
+                                  type="submit"
+                                  variant="contained"
+                                  color="error"
+                                  onClick={() => {
+                                    const routineActivity =
+                                      routine.activities.filter(
+                                        (id) => activity.id == id.id
+                                      );
+                                    removeRoutineActivity(
+                                      token,
+                                      routineActivity[0].routineActivityId
+                                    );
+                                  }}
+                                >
+                                  Remove Activity
+                                </RemoveActivityButton>
+                              </Box>
+                            </Card>
+                          ))
+                        : null}
                     </CardContent>
 
                     <Dialog open={openActivity} onClose={handleCloseActivity}>
@@ -275,16 +356,23 @@ function MyRoutines(props) {
                         {selectedRoutine ? selectedRoutine.name : null} routine
                       </DialogTitle>
                       <DialogContent>
-                        <Select
-                          value={selectedActivityId}
-                          onChange={handleSelectChange}
+                        <Box
+                          display={"flex"}
+                          justifyContent={"center"}
+                          alignItems={"center"}
                         >
-                          {activities.map((activity) => (
-                            <MenuItem value={activity.id}>
-                              {activity.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
+                          <Typography>Select an Activity:</Typography>
+                          <Select
+                            value={selectedActivityId}
+                            onChange={handleSelectChange}
+                          >
+                            {activities.map((activity) => (
+                              <MenuItem value={activity.id}>
+                                {activity.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </Box>
                         <TextField
                           autoFocus
                           margin="dense"

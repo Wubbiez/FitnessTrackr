@@ -93,14 +93,13 @@ export async function createActivity(token, name, description) {
       }
     );
     const results = await response.json();
-    console.log("Activity Created!")
+    console.log("Activity Created!");
     return results;
   } catch (err) {
     console.log("failed to make a activity");
     console.error(err);
   }
 }
-
 
 export async function getAllActivities() {
   try {
@@ -325,6 +324,30 @@ export async function removeRoutineActivity(token, activityId) {
     return results;
   } catch (err) {
     console.log("failed to delete routine activity");
+    console.error(err);
+  }
+}
+
+export async function editRoutineActivity(token, activityId, count, duration) {
+  try {
+    const response = await fetch(
+      `http://fitnesstrac-kr.herokuapp.com/api/routine_activities/${activityId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          count: count,
+          duration: duration,
+        }),
+      }
+    );
+    const results = await response.json();
+    return results;
+  } catch (err) {
+    console.log("failed to update routine activity");
     console.error(err);
   }
 }
