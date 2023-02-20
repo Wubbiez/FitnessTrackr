@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 function Header(props) {
   const { token, user, setToken, username, setUsername } = props;
-  // useEffect(() => {}, [token]);
+  useEffect(() => {}, [token]);
 
   return (
     <AppBar position="sticky">
@@ -29,14 +29,16 @@ function Header(props) {
           >
             Routines
           </Button>
-          <Button
-            onClick={() => {
-              window.location.href = "/myroutines";
-            }}
-            color="inherit"
-          >
-            My Routines
-          </Button>
+          {token ? (
+            <Button
+              onClick={() => {
+                window.location.href = "/myroutines";
+              }}
+              color="inherit"
+            >
+              My Routines
+            </Button>
+          ) : null}
           <Button
             onClick={() => {
               window.location.href = "/activities";
@@ -45,14 +47,16 @@ function Header(props) {
           >
             Activities
           </Button>
-          <Button
-            onClick={() => {
-              window.location.href = "/login";
-            }}
-            color="inherit"
-          >
-            Login/Register
-          </Button>
+          {!token ? (
+            <Button
+              onClick={() => {
+                window.location.href = "/login";
+              }}
+              color="inherit"
+            >
+              Login/Register
+            </Button>
+          ) : null}
 
           <Button
             onClick={() => {
