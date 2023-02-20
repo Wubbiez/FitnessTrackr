@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Routes, Route, Redirect, useParams } from "react-router-dom";
+import { Routes, Route, useParams } from "react-router-dom";
 import Header from "./components/Header";
 import Login from "./components/Register";
 import { styled } from "@mui/material/styles";
@@ -8,10 +8,9 @@ import { useState } from "react";
 import RoutinesList from "./components/Routines";
 import ActivitiesList from "./components/Activities";
 import Logout from "./components/Logout";
-import CreateActivity from "./components/createActivity";
 import UsersRoutines from "./components/UsersRoutines";
 import MyRoutines from "./components/MyRoutines";
-import Home from "./components/homepage";
+import Home from "./components/Homepage";
 
 export const TOKEN_STORAGE_KEY = "user-token";
 export const USER_STORAGE_KEY = "user-username";
@@ -73,18 +72,6 @@ function App() {
                 token={token}
                 name={name}
                 description={description}
-              />
-            }
-          />
-          <Route
-            path="/createActivity"
-            element={
-              <CreateActivity
-                token={token}
-                name={name}
-                setName={setName}
-                description={description}
-                setDescription={setDescription}
               />
             }
           />

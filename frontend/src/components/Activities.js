@@ -5,7 +5,6 @@ import {
   createActivity,
   editActivity,
   getAllActivities,
-  getPublicRoutines,
 } from "../api/apirequests";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -14,8 +13,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-// import { useHistory } from 'react-router-dom';
-//needs work
 
 const ActivitiesList = (props) => {
   const { token } = props;

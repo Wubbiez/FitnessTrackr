@@ -7,11 +7,9 @@ import {
   Typography,
   Card,
   CardContent,
-  Button,
 } from "@mui/material";
 import { getPublicRoutines } from "../api/apirequests";
-// import { useHistory } from 'react-router-dom';
-//needs work
+
 const Root = styled(Grid)({
   maxHeight: "90vh",
 });
@@ -21,13 +19,6 @@ const Main = styled(Grid)(({ theme }) => ({
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center", // center horizontally
-}));
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  margin: theme.spacing(2, 4),
-  display: "flex",
-  flexDirection: "column",
-  padding: theme.spacing(4),
 }));
 
 const Routines = styled(Card)(({ theme }) => ({
@@ -46,6 +37,14 @@ const ActivityDescriptions = styled("div")(({ theme }) => ({
   margin: theme.spacing(2, 2),
   display: "flex",
   flexDirection: "column",
+}));
+const tableHeader = styled("div")(({ theme }) => ({
+  margin: theme.spacing(1, 2),
+  fontWeight: "bold",
+  padding: theme.spacing(1, 1),
+  justifyContent: "center",
+  alignItems: "center",
+  textAlign: "center",
 }));
 
 const RoutinesList = () => {
@@ -68,19 +67,24 @@ const RoutinesList = () => {
               <Grid item xs={12} sm={12} md={12}>
                 <Card component={Routines} key={index}>
                   <CardContent>
-                    <Typography variant={"h5"}>{routine.name}</Typography>
-                    <Typography>{routine.goal}</Typography>
-                    <Typography>
-                      <Link
-                        component={"button"}
-                        variant={"h5"}
-                        onClick={() => {
-                          window.location.href = `/users/${routine.creatorName}/routines`;
-                        }}
-                      >
-                        {routine.creatorName}
-                      </Link>
-                    </Typography>
+                    <Box>
+                      <Typography variant={"h5"}>{routine.name}</Typography>
+                      <Typography>{routine.goal}</Typography>
+                      <Typography>
+                        <Link
+                          component={"button"}
+                          variant={"h5"}
+                          onClick={() => {
+                            window.location.href = `/users/${routine.creatorName}/routines`;
+                          }}
+                        >
+                          {routine.creatorName}
+                        </Link>
+                      </Typography>
+                    </Box>
+                    <Box component={tableHeader}>
+                      <Typography variant={"h5"}>Activities:</Typography>
+                    </Box>
                     <div>
                       {routine.activities.map((activity) => (
                         <Card component={Activities}>

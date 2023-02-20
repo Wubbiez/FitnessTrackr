@@ -144,24 +144,6 @@ export async function getUsersRoutines(user) {
   }
 }
 
-export async function getRoutinesByActivity(activity) {
-  try {
-    const response = await fetch(
-      `https://fitnesstrac-kr.herokuapp.com/api/activities/${activity}/routines`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const results = await response.json();
-    return results;
-  } catch (err) {
-    console.log("failed to get routines by activity");
-    console.error(err);
-  }
-}
-
 export async function getPublicRoutines() {
   try {
     const response = await fetch(

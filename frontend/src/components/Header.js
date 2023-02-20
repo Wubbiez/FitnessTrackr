@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { useEffect } from "react";
 
 function Header(props) {
-  const { token, user, setToken, username, setUsername } = props;
+  const { token } = props;
   useEffect(() => {}, [token]);
 
   return (
