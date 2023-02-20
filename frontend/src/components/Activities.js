@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./Activities.module.css";
 import * as React from "react";
-import { createActivity } from "../api/apirequests";
+import { createActivity, editActivity } from "../api/apirequests";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -18,6 +18,17 @@ const ActivitiesList = (props) => {
   const { token } = props
   const [activities, setActivities] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [selectedActivityId, setSelectedActivityId] = useState("");
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [openActivity, setOpenActivity] = React.useState(false);
+
+  const handleClickEditActivity = (activityId) => {
+    setSelectedActivityId(activityId);
+    setOpenEdit(true);
+  };
+
+  const EditActivityButton = (Button)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -37,6 +48,24 @@ const ActivitiesList = (props) => {
     }
   };
 
+  const handleCloseEdit = () => {
+    setSelectedActivityId(null);
+    setOpenEdit(false);
+  };
+
+  const handleEditSubmit = (event) => {
+    event.preventDefault();
+    setOpenActivity(false);
+    try {
+      editActivity(token, selectedActivityId, name, description);
+      setLoaded(false);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setName('');
+      setDescription('');
+    }
+  };
 
 
 
@@ -61,7 +90,10 @@ const ActivitiesList = (props) => {
       <>
         <h1 className={styles.head}>Activities</h1>
         <div>
-          <Button variant="outlined" onClick={handleClickOpen}>
+          <Button type="submit"
+                  variant="contained"
+                  color="primary" 
+                  onClick={handleClickOpen}>
             Create New Activity
           </Button>
           <Dialog open={open} onClose={handleClose}>
@@ -79,9 +111,10 @@ const ActivitiesList = (props) => {
                 fullWidth
                 variant="standard"
                 value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);}
-                  }
+                onChange={(e) => {
+                  setName(e.target.value);
+                }
+                }
               />
               <TextField
                 autoFocus
@@ -92,9 +125,9 @@ const ActivitiesList = (props) => {
                 fullWidth
                 variant="standard"
                 value={description}
-                  onChange={(e) => {
-                    setDescription(e.target.value);
-                  }}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
               />
             </DialogContent>
             <DialogActions>
@@ -104,14 +137,69 @@ const ActivitiesList = (props) => {
           </Dialog>
         </div>
         <body className={styles.main}>
-        <div className={styles.allActivities}>
-          {activities.map((activity) => (
-            <div key={activity.id} className={styles.activities}>
-              <h3>{activity.name}</h3>
-              <div>{activity.description}</div>
-            </div>
-          ))}
-        </div>
+          <div className={styles.allActivities}>
+            {activities.map((activity) => (
+              <div key={activity.id} className={styles.activities}>
+                <h3>{activity.name}</h3>
+                <div>{activity.description}</div>
+                <EditActivityButton
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    const activity =
+                    activities.filter(
+                      (id) => activities.id == id.id
+                    );
+                    handleClickEditActivity(
+                      activity[0].id
+                    );
+                  }}
+                >
+                  Edit Activity
+                </EditActivityButton>
+                <Dialog
+                  open={openEdit}
+                  onClose={handleCloseEdit}
+                  PaperProps={{
+                    style: {
+                      backgroundColor: "white",
+                      boxShadow: "none",
+                    },
+                  }}
+                >
+                  <DialogTitle>Edit activity:</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+                      Choose which changes you want to make
+                      below
+                    </DialogContentText>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="duration"
+                      label="duration"
+                      type="duration"
+                      fullWidth
+                      variant="standard"
+                      value={description}
+                      onChange={(e) => {
+                        setDescription(e.target.value);
+                      }}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleCloseEdit}>
+                      Cancel
+                    </Button>
+                    <Button onClick={handleEditSubmit}>
+                      Submit
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>
+            ))}
+          </div>
         </body>
       </>
     );
@@ -120,15 +208,15 @@ const ActivitiesList = (props) => {
       <>
         <h1 className={styles.head}>Activities</h1>
         <body className={styles.main}>
-        <div className={styles.allActivities}>
-          {activities.map((activity) => (
-            <div key={activity.id} className={styles.activities}>
-              <h3>{activity.name}</h3>
-              <div>{activity.description}</div>
-            </div>
-            
-          ))}
-        </div>
+          <div className={styles.allActivities}>
+            {activities.map((activity) => (
+              <div key={activity.id} className={styles.activities}>
+                <h3>{activity.name}</h3>
+                <div>{activity.description}</div>
+              </div>
+
+            ))}
+          </div>
         </body>
       </>
     );

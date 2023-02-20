@@ -378,3 +378,28 @@ export async function editRoutine(token, routineId, name, goal, isPublic) {
     console.error(err);
   }
 }
+
+
+export async function editActivity(token, activityId, name, description) {
+  try {
+    const response = await fetch(
+      `http://fitnesstrac-kr.herokuapp.com/api/activities/${activityId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: name,
+          description: description,
+        }),
+      }
+    );
+    const results = await response.json();
+    return results;
+  } catch (err) {
+    console.log("failed to update routine");
+    console.error(err);
+  }
+}
